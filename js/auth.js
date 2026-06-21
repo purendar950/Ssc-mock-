@@ -182,10 +182,10 @@ const EZAuth = (() => {
     return updateUser({ plan: "premium", planExpiry: expiry });
   }
   function logout() { return SUPA ? sbLogout() : localLogout(); }
-  function requireLogin(redirect = "/login.html") {
+  function requireLogin(redirect = "login.html") {
     if (!currentUser()) {
       const back = encodeURIComponent(location.pathname + location.search);
-      location.href = `${redirect}?next=${back}`;
+      location.href = EZ.url(`${redirect}?next=${back}`);
       return false;
     }
     return true;

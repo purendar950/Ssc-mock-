@@ -2,10 +2,11 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
+  <script>document.write('<base href="'+(location.hostname.endsWith(".github.io")?"/"+location.pathname.split("/")[1]+"/":"/")+'">')</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#2563eb" />
   <title>Partner Dashboard — ExamZen</title>
-  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <div id="ez-header"></div>
@@ -19,10 +20,10 @@
 
   <div id="ez-bottomnav"></div>
 
-  <script src="/js/firebase-config.js"></script>
-  <script src="/js/auth.js"></script>
-  <script src="/js/utils.js"></script>
-  <script src="/js/store.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/store.js"></script>
   <script>
     EZ.mountChrome("");
     if (!EZAuth.requireLogin()) {/* redirected */}
@@ -33,10 +34,10 @@
       const root = document.getElementById("dash-root");
       const p = EZStore.findPartnerByUser(u.uid);
       if (!p) {
-        root.innerHTML = `<div class="empty-state"><div class="big">🤝</div>You're not a partner yet.<br><a href="/apply-coupon.html">Apply to become a partner →</a></div>`;
+        root.innerHTML = `<div class="empty-state"><div class="big">🤝</div>You're not a partner yet.<br><a href="apply-coupon.html">Apply to become a partner →</a></div>`;
         return;
       }
-      const link = location.origin + "/buy-premium.html?ref=" + p.couponCode;
+      const link = EZ.url("buy-premium.html?ref=" + p.couponCode);
       const payouts = EZStore.payouts().filter(x => x.couponCode === p.couponCode)
         .sort((a,b)=> new Date(b.requestedAt) - new Date(a.requestedAt));
 

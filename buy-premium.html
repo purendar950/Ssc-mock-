@@ -2,10 +2,11 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
+  <script>document.write('<base href="'+(location.hostname.endsWith(".github.io")?"/"+location.pathname.split("/")[1]+"/":"/")+'">')</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#2563eb" />
   <title>Buy Premium — ExamZen</title>
-  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <div id="ez-header"></div>
@@ -39,17 +40,17 @@
           <div class="field"><label>12-digit UTR / Reference No.</label><input class="input" id="utr" pattern="[0-9]{10,14}" required /></div>
           <button class="btn btn-primary btn-block" type="submit">Submit for Verification</button>
         </form>
-        <p class="muted mt-16" style="font-size:.82rem">After submission, your request is verified within 1–6 hours. In this demo, an admin can approve it instantly from the <a href="/admin-vault.html">Admin Vault</a>.</p>
+        <p class="muted mt-16" style="font-size:.82rem">After submission, your request is verified within 1–6 hours. In this demo, an admin can approve it instantly from the <a href="admin-vault.html">Admin Vault</a>.</p>
       </div>
     </div>
   </main>
 
   <div id="ez-bottomnav"></div>
 
-  <script src="/js/firebase-config.js"></script>
-  <script src="/js/auth.js"></script>
-  <script src="/js/utils.js"></script>
-  <script src="/js/store.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/store.js"></script>
   <script>
     EZ.mountChrome("");
     if (!EZAuth.requireLogin()) {/* redirected */}
@@ -97,7 +98,7 @@
         submittedAt: new Date().toISOString(),
       });
       EZ.toast("Payment submitted — pending verification ⏳");
-      setTimeout(()=> location.href = "/profile.html", 1100);
+      setTimeout(()=> location.href = EZ.url("profile.html"), 1100);
       return false;
     }
     render();
