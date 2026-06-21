@@ -1,0 +1,18 @@
+{
+  "examCode": "GD",
+  "examName": "SSC GD Constable",
+  "config": { "tier1": { "sections": [
+    {"id":"REASONING","name":"General Intelligence & Reasoning","qs":20,"marks":40},
+    {"id":"GK","name":"General Knowledge & Awareness","qs":20,"marks":40},
+    {"id":"MATHS","name":"Elementary Mathematics","qs":20,"marks":40},
+    {"id":"ENGLISH","name":"English / Hindi","qs":20,"marks":40}
+  ] } },
+  "data": { "tier1": { "2025": {
+    "full_mocks": [
+      {"id":"gd-full-mock-01","title":"SSC GD Full Mock 1","type":"free","qs":80,"time":"60 Min","marks":160},
+      {"id":"gd-full-mock-02","title":"SSC GD Full Mock 2","type":"paid","qs":80,"time":"60 Min","marks":160}
+    ],
+    "sectional": [],
+    "subject_wise": []
+  } } }
+}

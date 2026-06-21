@@ -450,7 +450,7 @@ img { max-width: 100%; display: block; }
 .stat-chip { background: var(--card-bg); min-width: 130px; padding: 16px; border-radius: 18px; text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow); }
 .stat-chip .v { font-weight: 800; font-size: 1.2rem; color: var(--primary); }
 .stat-chip .l { font-size: .66rem; color: var(--text-muted); font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
-.action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 16px; }
+.action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; padding: 0 16px; }
 .action-box { background: var(--card-bg); padding: 30px 16px; border-radius: 24px; text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow); color: var(--text); text-decoration: none; }
 .action-box:hover { text-decoration: none; }
 .action-box .ico { width: 58px; height: 58px; background: var(--primary-soft); color: var(--primary); border-radius: 18px; display: grid; place-items: center; font-size: 1.6rem; margin: 0 auto 12px; }
