@@ -1,7 +1,7 @@
 /* ExamZen service worker - cache static shell + question data.
    Paths are relative to the SW scope so it works under a GitHub
    Pages project subpath (e.g. /Ssc-mock-/). */
-const CACHE = "examzen-v4";
+const CACHE = "examzen-v5";
 const PRECACHE = [
   "index.html",
   "login.html",
@@ -52,21 +52,28 @@ self.addEventListener("activate", (e) => {
 self.addEventListener("fetch", (e) => {
   const req = e.request;
   if (req.method !== "GET") return;
-  if (req.url.includes("/data/")) {
+
+  const isHTML = req.mode === "navigate" || req.destination === "document" ||
+                 (req.headers.get("accept") || "").includes("text/html");
+
+  // Network-first for HTML pages and data JSON so users always get fresh
+  // content after a deploy; fall back to cache when offline.
+  if (isHTML || req.url.includes("/data/")) {
     e.respondWith(
       fetch(req).then((res) => {
         const copy = res.clone();
         caches.open(CACHE).then((c) => c.put(req, copy));
         return res;
-      }).catch(() => caches.match(req))
+      }).catch(() => caches.match(req).then((c) => c || caches.match("index.html")))
     );
   } else {
+    // Cache-first for static assets (versioned by the cache name above).
     e.respondWith(
       caches.match(req).then((cached) => cached || fetch(req).then((res) => {
         const copy = res.clone();
         caches.open(CACHE).then((c) => c.put(req, copy));
         return res;
-      }).catch(() => caches.match("index.html")))
+      }))
     );
   }
 });
