@@ -385,3 +385,83 @@ img { max-width: 100%; display: block; }
 .status-pending { background: var(--warning-soft); color: var(--warning); }
 .status-approved, .status-paid { background: var(--success-soft); color: var(--success); }
 .status-rejected { background: var(--danger-soft); color: var(--danger); }
+
+
+/* ===========================================================
+   App-style chrome (Mock Matrix Hub-inspired layout)
+   =========================================================== */
+:root { --app-header-h: 64px; }
+
+.app-topbar {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--app-header-h);
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px; z-index: 1000; box-shadow: var(--shadow);
+}
+.app-topbar .left { display: flex; align-items: center; gap: 14px; }
+.app-topbar .burger { font-size: 1.2rem; cursor: pointer; color: var(--text); background: none; border: 0; padding: 4px; }
+.app-topbar .brand { font-weight: 800; font-size: 1.05rem; color: var(--text); display: flex; align-items: center; gap: 8px; }
+.app-topbar .brand .logo { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, var(--primary), #7c3aed); color: #fff; display: grid; place-items: center; font-weight: 800; }
+.app-topbar .brand .hub { background: #1e293b; color: #fff; padding: 1px 6px; border-radius: 5px; font-size: .8rem; }
+.avatar-btn { width: 38px; height: 38px; border-radius: 12px; background: var(--primary-soft); color: var(--primary); border: 2px solid var(--primary); font-weight: 800; cursor: pointer; }
+
+/* Sidebar */
+.app-sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 1040; display: none; backdrop-filter: blur(3px); }
+.app-sidebar-overlay.show { display: block; }
+.app-sidebar { position: fixed; top: 0; left: -300px; width: 290px; height: 100%; background: var(--surface); z-index: 1050; transition: left .28s cubic-bezier(.4,0,.2,1); display: flex; flex-direction: column; border-right: 1px solid var(--border); }
+.app-sidebar.show { left: 0; }
+.app-sidebar .sb-head { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); padding: 30px 20px; color: #fff; display: flex; align-items: center; gap: 14px; }
+.app-sidebar .sb-avatar { width: 52px; height: 52px; border-radius: 50%; background: #fff; color: var(--primary); display: grid; place-items: center; font-size: 1.3rem; font-weight: 800; border: 3px solid rgba(255,255,255,.3); }
+.app-sidebar .sb-menu { flex: 1; overflow-y: auto; padding: 12px 0; }
+.sb-item { display: flex; align-items: center; gap: 14px; padding: 13px 22px; color: var(--text); font-weight: 600; cursor: pointer; }
+.sb-item i { width: 22px; text-align: center; color: var(--text-muted); }
+.sb-item:hover { background: var(--primary-soft); color: var(--primary); text-decoration: none; }
+.sb-item.pro { background: var(--warning-soft); color: var(--warning); }
+.sb-item.admin { background: var(--success-soft); color: var(--success); }
+.sb-divider { border-top: 1px solid var(--border); margin: 8px 0; }
+
+/* App bottom nav */
+.app-bottomnav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); display: flex; border-top: 1px solid var(--border); z-index: 1000; box-shadow: 0 -4px 14px rgba(0,0,0,.04); }
+.app-bottomnav a { flex: 1; text-align: center; padding: 9px 0; color: var(--text-muted); font-size: .68rem; font-weight: 700; text-decoration: none; }
+.app-bottomnav a i { display: block; font-size: 1.25rem; margin-bottom: 3px; }
+.app-bottomnav a.active { color: var(--primary); }
+
+/* FABs */
+.fab-stack { position: fixed; right: 16px; bottom: calc(var(--bottomnav-h) + 16px); display: flex; flex-direction: column; gap: 12px; z-index: 999; }
+.fab { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 1.4rem; box-shadow: 0 6px 18px rgba(0,0,0,.18); text-decoration: none; }
+.fab.tg { background: #0088cc; }
+.fab.wa { background: #25d366; }
+
+/* Install banner */
+.install-banner { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #1e293b; color: #fff; padding: 12px 16px; display: flex; align-items: center; justify-content: center; gap: 12px; font-size: .9rem; border-bottom: 3px solid var(--primary); }
+.install-banner.hidden { display: none; }
+
+/* Page offset for fixed app header */
+.app-page { padding-top: calc(var(--app-header-h) + 16px); padding-bottom: calc(var(--bottomnav-h) + 28px); min-height: 100vh; }
+
+/* Hero / stats / practice hub (home) */
+.app-hero { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: #fff; padding: 40px 20px; text-align: center; border-bottom-left-radius: 32px; border-bottom-right-radius: 32px; box-shadow: var(--shadow); }
+.app-hero .tag { background: rgba(255,255,255,.15); padding: 5px 15px; border-radius: 50px; font-size: .72rem; font-weight: 700; border: 1px solid rgba(255,255,255,.2); display: inline-block; margin-bottom: 14px; }
+.app-hero h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; }
+.app-hero p { opacity: .9; font-size: .9rem; max-width: 460px; margin: 0 auto 16px; }
+.app-hero .btn { background: #fff; color: var(--primary); }
+.stats-scroll { display: flex; overflow-x: auto; gap: 14px; padding: 18px 16px; scrollbar-width: none; }
+.stats-scroll::-webkit-scrollbar { display: none; }
+.stat-chip { background: var(--card-bg); min-width: 130px; padding: 16px; border-radius: 18px; text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow); }
+.stat-chip .v { font-weight: 800; font-size: 1.2rem; color: var(--primary); }
+.stat-chip .l { font-size: .66rem; color: var(--text-muted); font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+.action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 16px; }
+.action-box { background: var(--card-bg); padding: 30px 16px; border-radius: 24px; text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow); color: var(--text); text-decoration: none; }
+.action-box:hover { text-decoration: none; }
+.action-box .ico { width: 58px; height: 58px; background: var(--primary-soft); color: var(--primary); border-radius: 18px; display: grid; place-items: center; font-size: 1.6rem; margin: 0 auto 12px; }
+.action-box.live .ico { background: var(--warning-soft); color: var(--warning); }
+.action-box h3 { font-size: 1.05rem; font-weight: 800; margin: 0; }
+.action-box p { font-size: .72rem; color: var(--text-muted); margin-top: 5px; }
+
+/* Exams listing (tier/year/category) */
+.exam-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (min-width: 640px) { .exam-grid { grid-template-columns: repeat(3, 1fr); } }
+.exam-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 18px; text-align: center; box-shadow: var(--shadow); color: var(--text); text-decoration: none; }
+.exam-card:hover { text-decoration: none; border-color: var(--primary); }
+.exam-card .ico { font-size: 1.8rem; margin-bottom: 8px; }
+.mock-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--card-bg); margin-bottom: 10px; box-shadow: var(--shadow); }

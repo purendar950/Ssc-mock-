@@ -8,16 +8,13 @@
   <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
-  <div id="ez-header"></div>
-
   <main class="page">
     <div class="container">
       <h1 class="section-title">Choose your exam</h1>
-      <div class="grid grid-2" id="exam-cards"></div>
+      <p class="muted">Select an exam to see Full Mocks, Sectionals, Subject-wise and PYQ tests by tier &amp; year.</p>
+      <div class="exam-grid mt-16" id="exam-cards"></div>
     </div>
   </main>
-
-  <div id="ez-bottomnav"></div>
 
   <script src="/js/firebase-config.js"></script>
   <script src="/js/auth.js"></script>
@@ -25,18 +22,14 @@
   <script>
     EZ.mountChrome("exams");
     fetch("/data/catalog.json").then(r=>r.json()).then(cat => {
-      const cards = Object.entries(cat).map(([id, e]) => `
-        <a class="card" href="${e.available ? `/exams/portal.html?exam=${id}` : '#'}" style="display:block;${e.available?'':'opacity:.6;pointer-events:none'}">
-          <div class="row between">
-            <div class="row"><span style="font-size:1.6rem">${e.emoji}</span>
-              <div><h4 style="color:var(--text)">${e.name}</h4><div class="meta muted">${e.subtitle}</div></div>
-            </div>
-            <span class="badge ${e.available ? 'badge-free' : 'badge-premium'}">${e.available ? 'Open' : 'Soon'}</span>
-          </div>
+      document.getElementById("exam-cards").innerHTML = Object.entries(cat).map(([id, e]) => `
+        <a class="exam-card" href="${e.available ? `/exams/portal.html?exam=${id}` : '#'}" style="${e.available?'':'opacity:.55;pointer-events:none'}">
+          <div class="ico">${e.emoji}</div>
+          <div style="font-weight:800">${e.name}</div>
+          <div class="muted" style="font-size:.72rem">${e.available ? 'Tap to open' : 'Coming soon'}</div>
         </a>`).join("");
-      document.getElementById("exam-cards").innerHTML = cards;
     }).catch(()=> {
-      document.getElementById("exam-cards").innerHTML = '<div class="empty-state">Could not load exams. Run from a web server (not file://).</div>';
+      document.getElementById("exam-cards").innerHTML = '<div class="empty-state">Could not load exams. Serve over HTTP (not file://).</div>';
     });
   </script>
 </body>

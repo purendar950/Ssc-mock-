@@ -1,6 +1,6 @@
 /* ===========================================================
-   ExamZen - Shared utilities
-   Theme handling, toast, storage helpers, header/nav injection
+   ExamZen - Shared utilities + app-style chrome
+   (Mock Matrix Hub-inspired top bar, sidebar, bottom nav)
    =========================================================== */
 
 const EZ = (() => {
@@ -14,186 +14,165 @@ const EZ = (() => {
     const next = cur === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
     localStorage.setItem("theme", next);
-    document.querySelectorAll("[data-theme-toggle]").forEach((b) => {
-      b.textContent = next === "dark" ? "\u2600\uFE0F" : "\uD83C\uDF19";
-    });
+    const sw = document.getElementById("themeSwitch");
+    if (sw) sw.checked = next === "dark";
   }
 
   /* ---------- Toast ---------- */
   let toastTimer = null;
   function toast(msg, ms = 2600) {
     let el = document.querySelector(".toast");
-    if (!el) {
-      el = document.createElement("div");
-      el.className = "toast";
-      document.body.appendChild(el);
-    }
+    if (!el) { el = document.createElement("div"); el.className = "toast"; document.body.appendChild(el); }
     el.textContent = msg;
     requestAnimationFrame(() => el.classList.add("show"));
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => el.classList.remove("show"), ms);
   }
 
-  /* ---------- Storage helpers ---------- */
-  function get(key, fallback = null) {
-    try {
-      const v = localStorage.getItem(key);
-      return v === null ? fallback : JSON.parse(v);
-    } catch {
-      return fallback;
-    }
-  }
-  function set(key, val) {
-    localStorage.setItem(key, JSON.stringify(val));
-  }
-  function del(key) {
-    localStorage.removeItem(key);
-  }
+  /* ---------- Storage ---------- */
+  function get(key, fb = null) { try { const v = localStorage.getItem(key); return v === null ? fb : JSON.parse(v); } catch { return fb; } }
+  function set(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+  function del(key) { localStorage.removeItem(key); }
 
   /* ---------- Formatting ---------- */
-  function fmtTime(totalSeconds) {
-    totalSeconds = Math.max(0, Math.floor(totalSeconds));
-    const h = Math.floor(totalSeconds / 3600);
-    const m = Math.floor((totalSeconds % 3600) / 60);
-    const s = totalSeconds % 60;
-    const pad = (n) => String(n).padStart(2, "0");
-    return h > 0 ? `${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
+  function fmtTime(s) {
+    s = Math.max(0, Math.floor(s));
+    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+    const p = (n) => String(n).padStart(2, "0");
+    return h > 0 ? `${p(h)}:${p(m)}:${p(sec)}` : `${p(m)}:${p(sec)}`;
   }
-  function fmtDuration(seconds) {
-    const m = Math.floor(seconds / 60);
-    const s = Math.floor(seconds % 60);
-    return `${m} min ${s} sec`;
-  }
-  function qs(name) {
-    return new URLSearchParams(window.location.search).get(name);
+  function fmtDuration(s) { return `${Math.floor(s / 60)} min ${Math.floor(s % 60)} sec`; }
+  function qs(name) { return new URLSearchParams(location.search).get(name); }
+
+  /* ---------- Font Awesome (icons) ---------- */
+  function ensureIcons() {
+    if (document.getElementById("ez-fa")) return;
+    const l = document.createElement("link");
+    l.id = "ez-fa"; l.rel = "stylesheet";
+    l.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css";
+    document.head.appendChild(l);
   }
 
-  /* ---------- Header + bottom nav injection ---------- */
+  /* ---------- Chrome: top bar + sidebar + bottom nav + FABs ---------- */
   function mountChrome(active = "") {
     initTheme();
-    const themeIcon =
-      (localStorage.getItem("theme") || "light") === "dark"
-        ? "\u2600\uFE0F"
-        : "\uD83C\uDF19";
-    const user = EZAuth ? EZAuth.currentUser() : null;
-    const profileLabel = user ? (user.name || "Profile").split(" ")[0] : "Login";
+    ensureIcons();
+    const user = (typeof EZAuth !== "undefined") ? EZAuth.currentUser() : null;
+    const premium = user && typeof EZAuth !== "undefined" ? EZAuth.isPremium() : false;
+    const isAdmin = !!(user && (user.isAdmin || (user.username || "").toLowerCase() === "admin"));
+    const isPartner = !!(user && user.isPartner);
+    const initial = (user ? (user.username || user.name || "U") : "U").charAt(0).toUpperCase();
+    const dark = (localStorage.getItem("theme") || "light") === "dark";
 
-    const headerHost = document.getElementById("ez-header");
-    if (headerHost) {
-      headerHost.innerHTML = `
-        <header class="app-header">
-          <div class="container">
-            <a class="brand" href="/index.html">
-              <span class="logo">EZ</span><span>ExamZen</span>
-            </a>
-            <nav class="nav-desktop">
-              <a href="/index.html" class="${active === "home" ? "active" : ""}">Home</a>
-              <a href="/exams/index.html" class="${active === "exams" ? "active" : ""}">Mock Tests</a>
-              <a href="/live-test/index.html" class="${active === "live" ? "active" : ""}">Live Tests</a>
-              <a href="/pricing.html" class="${active === "pricing" ? "active" : ""}">Pricing</a>
-              <a href="/saved.html" class="${active === "saved" ? "active" : ""}">Saved</a>
-              <a href="/profile.html" class="${active === "profile" ? "active" : ""}">${profileLabel}</a>
-            </nav>
-            <div class="header-actions">
-              <button class="icon-btn" data-theme-toggle title="Toggle theme">${themeIcon}</button>
-            </div>
-          </div>
-        </header>`;
-    }
-
-    const navHost = document.getElementById("ez-bottomnav");
-    if (navHost) {
-      navHost.innerHTML = `
-        <nav class="bottom-nav">
-          <a href="/index.html" class="${active === "home" ? "active" : ""}"><span class="ico">\uD83C\uDFE0</span>Home</a>
-          <a href="/exams/index.html" class="${active === "exams" ? "active" : ""}"><span class="ico">\uD83D\uDCDD</span>Exams</a>
-          <a href="/live-test/index.html" class="${active === "live" ? "active" : ""}"><span class="ico">\uD83D\uDD34</span>Live</a>
-          <a href="/profile.html" class="${active === "profile" ? "active" : ""}"><span class="ico">\uD83D\uDC64</span>Profile</a>
-        </nav>`;
-    }
-
-    document.querySelectorAll("[data-theme-toggle]").forEach((b) => {
-      b.addEventListener("click", toggleTheme);
-    });
-
-    mountFooter();
-  }
-
-  function mountFooter() {
-    if (document.querySelector(".app-footer")) return;
-    const year = new Date().getFullYear();
-    const f = document.createElement("footer");
-    f.className = "app-footer";
-    f.innerHTML = `
-      <div class="container">
-        <div class="footer-cols">
-          <div>
-            <div class="brand" style="margin-bottom:8px"><span class="logo">EZ</span><span>ExamZen</span></div>
-            <p class="muted" style="font-size:.85rem;max-width:320px">Free & premium mock tests for SSC, Railway and State exams with bilingual questions and All-India ranking.</p>
-          </div>
-          <div>
-            <h5>Prepare</h5>
-            <a href="/exams/index.html">Mock Tests</a>
-            <a href="/live-test/index.html">Live Tests</a>
-            <a href="/series/index.html">Series</a>
-            <a href="/pricing.html">Pricing</a>
-          </div>
-          <div>
-            <h5>Partner</h5>
-            <a href="/apply-coupon.html">Become a Partner</a>
-            <a href="/partner-dashboard.html">Partner Dashboard</a>
-            <a href="/admin-vault.html">Admin</a>
-          </div>
-          <div>
-            <h5>Company</h5>
-            <a href="/about-us.html">About Us</a>
-            <a href="/contact-us.html">Contact</a>
-            <a href="/privacy-policy.html">Privacy Policy</a>
-            <a href="/refund-policy.html">Refund Policy</a>
-            <a href="/terms-conditions.html">Terms &amp; Conditions</a>
-          </div>
-        </div>
-        <div class="footer-bottom">© ${year} ExamZen. All rights reserved.</div>
+    /* Top bar */
+    const header = document.createElement("header");
+    header.className = "app-topbar";
+    header.innerHTML = `
+      <div class="left">
+        <button class="burger" aria-label="Menu" onclick="EZ.toggleSidebar()"><i class="fas fa-bars"></i></button>
+        <a class="brand" href="/index.html">
+          <span class="logo">EZ</span><span>EXAM<span class="hub">ZEN</span></span>
+        </a>
+      </div>
+      <div>${user
+        ? `<button class="avatar-btn" onclick="EZ.toggleSidebar()">${initial}</button>`
+        : `<a class="btn btn-primary btn-sm" href="/login.html"><i class="fas fa-right-to-bracket"></i> Login</a>`}
       </div>`;
-    // Insert before bottom-nav host if present, else append to body.
-    const navHost = document.getElementById("ez-bottomnav");
-    document.body.insertBefore(f, navHost || null);
+
+    /* Sidebar */
+    const overlay = document.createElement("div");
+    overlay.className = "app-sidebar-overlay";
+    overlay.id = "ez-sb-overlay";
+    overlay.onclick = toggleSidebar;
+
+    const sidebar = document.createElement("nav");
+    sidebar.className = "app-sidebar";
+    sidebar.id = "ez-sidebar";
+    sidebar.innerHTML = `
+      <div class="sb-head">
+        <div class="sb-avatar">${initial}</div>
+        <div>
+          <div style="font-weight:800">${user ? (user.username || user.name) : "Guest"}</div>
+          <div style="font-size:.8rem;opacity:.9">${user ? (premium ? "⭐ PRO Member" : "Free plan") : "Not logged in"}</div>
+        </div>
+      </div>
+      <div class="sb-menu">
+        <a class="sb-item" href="/index.html"><i class="fas fa-house"></i> Home</a>
+        <a class="sb-item" href="/exams/index.html"><i class="fas fa-file-signature"></i> Mock Tests</a>
+        <a class="sb-item" href="/live-test/index.html"><i class="fas fa-bolt"></i> Live Mocks</a>
+        <a class="sb-item" href="/series/index.html"><i class="fas fa-layer-group"></i> Series</a>
+        ${isAdmin ? `<a class="sb-item admin" href="/admin-vault.html"><i class="fas fa-user-shield"></i> Admin Panel</a>` : ""}
+        ${isPartner
+          ? `<a class="sb-item admin" href="/partner-dashboard.html"><i class="fas fa-chart-pie"></i> Earnings</a>`
+          : `<a class="sb-item" href="/apply-coupon.html"><i class="fas fa-handshake"></i> Become a Partner</a>`}
+        ${premium ? "" : `<a class="sb-item pro" href="/buy-premium.html"><i class="fas fa-crown"></i> Buy Premium</a>`}
+        <div class="sb-divider"></div>
+        <a class="sb-item" href="/saved.html"><i class="fas fa-bookmark"></i> Saved Questions</a>
+        <a class="sb-item" href="/profile.html"><i class="fas fa-user"></i> My Profile</a>
+        <div class="sb-item" onclick="EZ.toggleTheme()">
+          <i class="fas fa-moon"></i> Dark Mode
+          <label class="form-switch" style="margin-left:auto"><input type="checkbox" id="themeSwitch" ${dark ? "checked" : ""} onclick="event.preventDefault();EZ.toggleTheme()"></label>
+        </div>
+        <a class="sb-item" href="/privacy-policy.html"><i class="fas fa-shield-halved"></i> Privacy Policy</a>
+        ${user ? `<div class="sb-divider"></div><div class="sb-item" style="color:var(--danger)" onclick="EZ.logout()"><i class="fas fa-right-from-bracket"></i> Logout</div>` : ""}
+      </div>`;
+
+    /* Bottom nav */
+    const nav = document.createElement("nav");
+    nav.className = "app-bottomnav";
+    const a = (k) => active === k ? "active" : "";
+    nav.innerHTML = `
+      <a class="${a("home")}" href="/index.html"><i class="fas fa-house"></i>HOME</a>
+      <a class="${a("exams")}" href="/exams/index.html"><i class="fas fa-file-pen"></i>EXAMS</a>
+      <a class="${a("live")}" href="/live-test/index.html"><i class="fas fa-bolt"></i>LIVE</a>
+      <a class="${a("profile")}" href="/profile.html"><i class="fas fa-user-circle"></i>PROFILE</a>`;
+
+    /* FABs */
+    const fabs = document.createElement("div");
+    fabs.className = "fab-stack";
+    fabs.innerHTML = `
+      <a class="fab wa" href="https://whatsapp.com" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>
+      <a class="fab tg" href="https://t.me" target="_blank" rel="noopener"><i class="fab fa-telegram-plane"></i></a>`;
+
+    document.body.prepend(header);
+    document.body.appendChild(overlay);
+    document.body.appendChild(sidebar);
+    document.body.appendChild(nav);
+    document.body.appendChild(fabs);
+
+    // Ensure main content clears the fixed header.
+    document.querySelectorAll(".page").forEach((p) => p.classList.add("app-page"));
   }
 
-  return {
-    initTheme, toggleTheme, toast, get, set, del,
-    fmtTime, fmtDuration, qs, mountChrome, mountFooter,
-  };
+  function toggleSidebar() {
+    document.getElementById("ez-sidebar")?.classList.toggle("show");
+    document.getElementById("ez-sb-overlay")?.classList.toggle("show");
+  }
+
+  function logout() {
+    if (typeof EZAuth !== "undefined") EZAuth.logout();
+    toast("Logged out");
+    setTimeout(() => (location.href = "/index.html"), 500);
+  }
+
+  return { initTheme, toggleTheme, toast, get, set, del, fmtTime, fmtDuration, qs, mountChrome, toggleSidebar, logout };
 })();
 
-
-/* ---------- PWA: service worker + install prompt ---------- */
+/* ---------- PWA: service worker + install banner ---------- */
 (function () {
   if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js").catch(() => {});
-    });
+    window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
   }
-
-  let deferredPrompt = null;
+  let deferred = null;
   window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    // Show a lightweight install chip in the header area if present.
-    const host = document.querySelector(".header-actions");
-    if (!host || host.querySelector("[data-install]")) return;
-    const btn = document.createElement("button");
-    btn.className = "icon-btn";
-    btn.dataset.install = "1";
-    btn.title = "Install app";
-    btn.textContent = "\u2B07\uFE0F";
-    btn.addEventListener("click", async () => {
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt();
-      await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      btn.remove();
-    });
-    host.prepend(btn);
+    e.preventDefault(); deferred = e;
+    const b = document.createElement("div");
+    b.className = "install-banner";
+    b.innerHTML = `<span><i class="fas fa-mobile-screen"></i> Install ExamZen for a better experience!</span>
+      <button class="btn btn-primary btn-sm" id="ez-install">Install</button>
+      <button class="btn btn-sm btn-outline" id="ez-install-x">✕</button>`;
+    document.body.appendChild(b);
+    b.querySelector("#ez-install").onclick = async () => { b.remove(); if (deferred) { deferred.prompt(); deferred = null; } };
+    b.querySelector("#ez-install-x").onclick = () => b.remove();
   });
 })();
