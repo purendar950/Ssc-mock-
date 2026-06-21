@@ -1,26 +1,27 @@
 /* ===========================================================
-   ExamZen - Firebase configuration
+   ExamZen - Backend configuration
    -----------------------------------------------------------
-   Fill in the values from your Firebase console to enable the
-   real backend. While these remain placeholders, the app runs
-   in LOCAL MODE (auth + data persisted in the browser via
-   localStorage) so you can develop and demo without a backend.
+   PASTE YOUR SUPABASE PROJECT VALUES BELOW to switch the app
+   from LOCAL MODE (browser-only auth) to your real Supabase
+   backend. Get them in: Supabase Dashboard -> Project Settings
+   -> API -> "Project URL" and "anon public" key.
 
-   Firebase API keys are MEANT to be public in client code;
-   security is enforced by Firestore Security Rules, not by
-   hiding the key. See README for the recommended rules.
+   The anon key is meant to be public in client code; security
+   is enforced by Row Level Security (RLS) policies, not by
+   hiding the key. The required SQL is in /supabase/schema.sql.
+
+   While these stay as placeholders, the app keeps running in
+   LOCAL MODE so you can demo without any backend.
    =========================================================== */
 
-window.FIREBASE_CONFIG = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID",
-};
+window.SUPABASE_URL = "YOUR_SUPABASE_URL";          // e.g. https://abcd1234.supabase.co
+window.SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY"; // e.g. eyJhbGciOi...
 
-// Auto-detect whether real Firebase config has been provided.
-window.FIREBASE_ENABLED =
-  window.FIREBASE_CONFIG.apiKey &&
-  window.FIREBASE_CONFIG.apiKey !== "YOUR_API_KEY";
+window.SUPABASE_ENABLED =
+  !!window.SUPABASE_URL &&
+  window.SUPABASE_URL !== "YOUR_SUPABASE_URL" &&
+  !!window.SUPABASE_ANON_KEY &&
+  window.SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY";
+
+// Backwards-compat flag used by older comments; not required.
+window.FIREBASE_ENABLED = false;

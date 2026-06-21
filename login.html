@@ -66,8 +66,8 @@
   <script src="/js/utils.js"></script>
   <script>
     EZ.mountChrome("");
-    // Already logged in? go to profile / next.
-    if (EZAuth.currentUser()) location.href = nextUrl();
+    // Already logged in? go to profile / next (wait for session restore first).
+    EZAuth.ready.then(() => { if (EZAuth.currentUser()) location.href = nextUrl(); });
 
     function nextUrl() { return EZ.qs("next") || "/profile.html"; }
 
@@ -79,27 +79,31 @@
       document.getElementById("form-register").classList.toggle("hidden", login);
     }
 
-    function doLogin(e) {
+    async function doLogin(e) {
       e.preventDefault();
-      const r = EZAuth.login({
+      EZ.toast("Signing in…");
+      const r = await EZAuth.login({
         identifier: document.getElementById("login-id").value,
         password: document.getElementById("login-pass").value,
       });
       if (!r.ok) { EZ.toast(r.error); return false; }
-      EZ.toast("Welcome back, " + r.user.name.split(" ")[0] + "!");
+      const nm = (r.user && r.user.name) ? r.user.name.split(" ")[0] : "back";
+      EZ.toast("Welcome " + nm + "!");
       setTimeout(() => (location.href = nextUrl()), 600);
       return false;
     }
 
-    function doRegister(e) {
+    async function doRegister(e) {
       e.preventDefault();
-      const r = EZAuth.register({
+      EZ.toast("Creating account…");
+      const r = await EZAuth.register({
         name: document.getElementById("reg-name").value.trim(),
         username: document.getElementById("reg-user").value.trim(),
         email: document.getElementById("reg-email").value.trim(),
         password: document.getElementById("reg-pass").value,
       });
       if (!r.ok) { EZ.toast(r.error); return false; }
+      if (r.needsConfirmation) { EZ.toast("Check your email to confirm, then log in."); return false; }
       EZ.toast("Account created! 🎉");
       setTimeout(() => (location.href = nextUrl()), 600);
       return false;

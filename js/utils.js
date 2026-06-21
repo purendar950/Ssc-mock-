@@ -54,9 +54,16 @@ const EZ = (() => {
   }
 
   /* ---------- Chrome: top bar + sidebar + bottom nav + FABs ---------- */
+  let _activeNav = "";
+  let _chromeHooked = false;
   function mountChrome(active = "") {
+    _activeNav = active || _activeNav;
     initTheme();
     ensureIcons();
+
+    // Idempotent: remove any previously injected chrome so re-renders are clean.
+    document.querySelectorAll(".app-topbar, #ez-sidebar, #ez-sb-overlay, .app-bottomnav, .fab-stack").forEach((el) => el.remove());
+
     const user = (typeof EZAuth !== "undefined") ? EZAuth.currentUser() : null;
     const premium = user && typeof EZAuth !== "undefined" ? EZAuth.isPremium() : false;
     const isAdmin = !!(user && (user.isAdmin || (user.username || "").toLowerCase() === "admin"));
@@ -142,6 +149,13 @@ const EZ = (() => {
 
     // Ensure main content clears the fixed header.
     document.querySelectorAll(".page").forEach((p) => p.classList.add("app-page"));
+
+    // Re-render chrome once the session resolves (Supabase) and on auth changes.
+    if (!_chromeHooked && typeof EZAuth !== "undefined") {
+      _chromeHooked = true;
+      if (EZAuth.ready) EZAuth.ready.then(() => mountChrome(_activeNav));
+      if (EZAuth.onChange) EZAuth.onChange(() => mountChrome(_activeNav));
+    }
   }
 
   function toggleSidebar() {
