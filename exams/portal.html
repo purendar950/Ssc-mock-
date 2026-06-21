@@ -2,10 +2,11 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
+  <script>document.write('<base href="'+(location.hostname.endsWith(".github.io")?"/"+location.pathname.split("/")[1]+"/":"/")+'">')</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#2563eb" />
   <title>Mock Tests — ExamZen</title>
-  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <main class="page">
@@ -30,24 +31,24 @@
       <p class="muted">This test is part of Premium. Upgrade once (₹99/yr) to unlock all mocks, PYQs and unlimited reattempts.</p>
       <div class="modal-actions">
         <button class="btn btn-outline btn-block" onclick="closeUpgrade()">Maybe later</button>
-        <a class="btn btn-primary btn-block" href="/pricing.html">View Plans</a>
+        <a class="btn btn-primary btn-block" href="pricing.html">View Plans</a>
       </div>
     </div>
   </div>
 
-  <script src="/js/firebase-config.js"></script>
-  <script src="/js/auth.js"></script>
-  <script src="/js/utils.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/utils.js"></script>
   <script>
     EZ.mountChrome("exams");
     const examId = EZ.qs("exam") || "cgl";
     const CATS = [["full_mocks","Full Mocks"],["sectional","Sectionals"],["subject_wise","Subject Wise"]];
     let exam = null, tier = null, year = null, cat = "full_mocks";
 
-    fetch("/data/catalog.json").then(r=>r.json()).then(cat => {
+    fetch("data/catalog.json").then(r=>r.json()).then(cat => {
       const meta = cat[examId];
       if (!meta) throw new Error("no exam");
-      return fetch("/data/" + meta.dataFile);
+      return fetch("data/" + meta.dataFile);
     }).then(r=>r.json()).then(d => {
       exam = d;
       document.getElementById("exam-title").textContent = (d.examName || d.examCode) + " Mock Tests";
@@ -102,9 +103,9 @@
     }
 
     function startTest(id, paid, title){
-      if (!EZAuth.currentUser()){ location.href = "/login.html?next=" + encodeURIComponent(`/test/index.html?testId=${id}&title=${title}&premium=${paid?1:0}`); return; }
+      if (!EZAuth.currentUser()){ location.href = EZ.url("login.html?next=") + encodeURIComponent(`test/index.html?testId=${id}&title=${title}&premium=${paid?1:0}`); return; }
       if (paid && !EZAuth.isPremium()){ openUpgrade(); return; }
-      location.href = `/test/index.html?testId=${id}&title=${title}&premium=${paid?1:0}`;
+      location.href = EZ.url(`test/index.html?testId=${id}&title=${title}&premium=${paid?1:0}`);
     }
     function openUpgrade(){ document.getElementById("upgrade-modal").classList.add("show"); }
     function closeUpgrade(){ document.getElementById("upgrade-modal").classList.remove("show"); }
