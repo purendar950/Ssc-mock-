@@ -2,12 +2,13 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
+  <script>document.write('<base href="'+(location.hostname.endsWith(".github.io")?"/"+location.pathname.split("/")[1]+"/":"/")+'">')</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#2563eb" />
   <title>ExamZen | SSC, Railway & State Mock Tests — PYQ & Full Mocks</title>
   <meta name="description" content="Free & premium mock tests for SSC, Railway and State exams. PYQ, Sectional, Subject-wise and Full Mocks with All-India ranking." />
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <main class="page">
@@ -15,7 +16,7 @@
       <div class="tag">👋 Welcome to ExamZen</div>
       <h1>Crack SSC, Railway &amp; State Exams</h1>
       <p>Your one-stop hub for PYQs, Sectionals, Subject-wise practice and premium Full Mocks — in English &amp; हिन्दी.</p>
-      <a href="/exams/index.html" class="btn">Start Practicing</a>
+      <a href="exams/index.html" class="btn">Start Practicing</a>
     </section>
 
     <div class="stats-scroll">
@@ -30,12 +31,12 @@
     </div>
 
     <div class="action-grid">
-      <a href="/exams/index.html" class="action-box">
+      <a href="exams/index.html" class="action-box">
         <div class="ico"><i class="fas fa-graduation-cap"></i></div>
         <h3>EXAMS</h3>
         <p>SSC, Railway &amp; State PYQs</p>
       </a>
-      <a href="/live-test/index.html" class="action-box live">
+      <a href="live-test/index.html" class="action-box live">
         <div class="ico"><i class="fas fa-tower-broadcast"></i></div>
         <h3>LIVE TESTS</h3>
         <p>Real-time All-India ranking</p>
@@ -51,19 +52,19 @@
       <div class="card center">
         <h3>Go Premium — ₹99/year</h3>
         <p class="muted mt-8">Unlock all mocks, all PYQs, unlimited reattempts &amp; advanced analytics.</p>
-        <a class="btn btn-primary mt-16" href="/pricing.html">View Plans</a>
+        <a class="btn btn-primary mt-16" href="pricing.html">View Plans</a>
       </div>
     </div>
   </main>
 
-  <script src="/js/firebase-config.js"></script>
-  <script src="/js/auth.js"></script>
-  <script src="/js/utils.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/utils.js"></script>
   <script>
     EZ.mountChrome("home");
-    fetch("/data/catalog.json").then(r=>r.json()).then(cat => {
+    fetch("data/catalog.json").then(r=>r.json()).then(cat => {
       document.getElementById("popular").innerHTML = Object.entries(cat).map(([id, e]) => `
-        <a class="exam-card" href="${e.available ? `/exams/portal.html?exam=${id}` : '#'}" style="${e.available?'':'opacity:.55;pointer-events:none'}">
+        <a class="exam-card" href="${e.available ? `exams/portal.html?exam=${id}` : '#'}" style="${e.available?'':'opacity:.55;pointer-events:none'}">
           <div class="ico">${e.emoji}</div>
           <div style="font-weight:800">${e.name}</div>
           <div class="muted" style="font-size:.72rem">${e.available ? 'Open' : 'Coming soon'}</div>

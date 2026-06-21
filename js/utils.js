@@ -44,6 +44,18 @@ const EZ = (() => {
   function fmtDuration(s) { return `${Math.floor(s / 60)} min ${Math.floor(s % 60)} sec`; }
   function qs(name) { return new URLSearchParams(location.search).get(name); }
 
+  /* ---------- Base-aware URL resolver (works under GitHub Pages subpath) ---------- */
+  function url(p) {
+    p = String(p);
+    if (/^(https?:)?\/\//.test(p) || /^(mailto:|tel:)/.test(p) || p.charAt(0) === "#") return p;
+    const basePath = new URL(".", document.baseURI).pathname; // "/Ssc-mock-/" or "/"
+    if (p.charAt(0) === "/") {
+      if (p.indexOf(basePath) === 0) return p;          // already includes base
+      return basePath.replace(/\/$/, "") + p;
+    }
+    return new URL(p, document.baseURI).href;            // relative -> full URL (keeps query)
+  }
+
   /* ---------- Font Awesome (icons) ---------- */
   function ensureIcons() {
     if (document.getElementById("ez-fa")) return;
@@ -77,13 +89,13 @@ const EZ = (() => {
     header.innerHTML = `
       <div class="left">
         <button class="burger" aria-label="Menu" onclick="EZ.toggleSidebar()"><i class="fas fa-bars"></i></button>
-        <a class="brand" href="/index.html">
+        <a class="brand" href="index.html">
           <span class="logo">EZ</span><span>EXAM<span class="hub">ZEN</span></span>
         </a>
       </div>
       <div>${user
         ? `<button class="avatar-btn" onclick="EZ.toggleSidebar()">${initial}</button>`
-        : `<a class="btn btn-primary btn-sm" href="/login.html"><i class="fas fa-right-to-bracket"></i> Login</a>`}
+        : `<a class="btn btn-primary btn-sm" href="login.html"><i class="fas fa-right-to-bracket"></i> Login</a>`}
       </div>`;
 
     /* Sidebar */
@@ -104,23 +116,23 @@ const EZ = (() => {
         </div>
       </div>
       <div class="sb-menu">
-        <a class="sb-item" href="/index.html"><i class="fas fa-house"></i> Home</a>
-        <a class="sb-item" href="/exams/index.html"><i class="fas fa-file-signature"></i> Mock Tests</a>
-        <a class="sb-item" href="/live-test/index.html"><i class="fas fa-bolt"></i> Live Mocks</a>
-        <a class="sb-item" href="/series/index.html"><i class="fas fa-layer-group"></i> Series</a>
-        ${isAdmin ? `<a class="sb-item admin" href="/admin-vault.html"><i class="fas fa-user-shield"></i> Admin Panel</a>` : ""}
+        <a class="sb-item" href="index.html"><i class="fas fa-house"></i> Home</a>
+        <a class="sb-item" href="exams/index.html"><i class="fas fa-file-signature"></i> Mock Tests</a>
+        <a class="sb-item" href="live-test/index.html"><i class="fas fa-bolt"></i> Live Mocks</a>
+        <a class="sb-item" href="series/index.html"><i class="fas fa-layer-group"></i> Series</a>
+        ${isAdmin ? `<a class="sb-item admin" href="admin-vault.html"><i class="fas fa-user-shield"></i> Admin Panel</a>` : ""}
         ${isPartner
-          ? `<a class="sb-item admin" href="/partner-dashboard.html"><i class="fas fa-chart-pie"></i> Earnings</a>`
-          : `<a class="sb-item" href="/apply-coupon.html"><i class="fas fa-handshake"></i> Become a Partner</a>`}
-        ${premium ? "" : `<a class="sb-item pro" href="/buy-premium.html"><i class="fas fa-crown"></i> Buy Premium</a>`}
+          ? `<a class="sb-item admin" href="partner-dashboard.html"><i class="fas fa-chart-pie"></i> Earnings</a>`
+          : `<a class="sb-item" href="apply-coupon.html"><i class="fas fa-handshake"></i> Become a Partner</a>`}
+        ${premium ? "" : `<a class="sb-item pro" href="buy-premium.html"><i class="fas fa-crown"></i> Buy Premium</a>`}
         <div class="sb-divider"></div>
-        <a class="sb-item" href="/saved.html"><i class="fas fa-bookmark"></i> Saved Questions</a>
-        <a class="sb-item" href="/profile.html"><i class="fas fa-user"></i> My Profile</a>
+        <a class="sb-item" href="saved.html"><i class="fas fa-bookmark"></i> Saved Questions</a>
+        <a class="sb-item" href="profile.html"><i class="fas fa-user"></i> My Profile</a>
         <div class="sb-item" onclick="EZ.toggleTheme()">
           <i class="fas fa-moon"></i> Dark Mode
           <label class="form-switch" style="margin-left:auto"><input type="checkbox" id="themeSwitch" ${dark ? "checked" : ""} onclick="event.preventDefault();EZ.toggleTheme()"></label>
         </div>
-        <a class="sb-item" href="/privacy-policy.html"><i class="fas fa-shield-halved"></i> Privacy Policy</a>
+        <a class="sb-item" href="privacy-policy.html"><i class="fas fa-shield-halved"></i> Privacy Policy</a>
         ${user ? `<div class="sb-divider"></div><div class="sb-item" style="color:var(--danger)" onclick="EZ.logout()"><i class="fas fa-right-from-bracket"></i> Logout</div>` : ""}
       </div>`;
 
@@ -129,10 +141,10 @@ const EZ = (() => {
     nav.className = "app-bottomnav";
     const a = (k) => active === k ? "active" : "";
     nav.innerHTML = `
-      <a class="${a("home")}" href="/index.html"><i class="fas fa-house"></i>HOME</a>
-      <a class="${a("exams")}" href="/exams/index.html"><i class="fas fa-file-pen"></i>EXAMS</a>
-      <a class="${a("live")}" href="/live-test/index.html"><i class="fas fa-bolt"></i>LIVE</a>
-      <a class="${a("profile")}" href="/profile.html"><i class="fas fa-user-circle"></i>PROFILE</a>`;
+      <a class="${a("home")}" href="index.html"><i class="fas fa-house"></i>HOME</a>
+      <a class="${a("exams")}" href="exams/index.html"><i class="fas fa-file-pen"></i>EXAMS</a>
+      <a class="${a("live")}" href="live-test/index.html"><i class="fas fa-bolt"></i>LIVE</a>
+      <a class="${a("profile")}" href="profile.html"><i class="fas fa-user-circle"></i>PROFILE</a>`;
 
     /* FABs */
     const fabs = document.createElement("div");
@@ -166,16 +178,16 @@ const EZ = (() => {
   function logout() {
     if (typeof EZAuth !== "undefined") EZAuth.logout();
     toast("Logged out");
-    setTimeout(() => (location.href = "/index.html"), 500);
+    setTimeout(() => (location.href = EZ.url("index.html")), 500);
   }
 
-  return { initTheme, toggleTheme, toast, get, set, del, fmtTime, fmtDuration, qs, mountChrome, toggleSidebar, logout };
+  return { initTheme, toggleTheme, toast, get, set, del, fmtTime, fmtDuration, qs, url, mountChrome, toggleSidebar, logout };
 })();
 
 /* ---------- PWA: service worker + install banner ---------- */
 (function () {
   if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
+    window.addEventListener("load", () => navigator.serviceWorker.register(EZ.url("sw.js")).catch(() => {}));
   }
   let deferred = null;
   window.addEventListener("beforeinstallprompt", (e) => {

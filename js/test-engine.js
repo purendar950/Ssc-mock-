@@ -21,19 +21,19 @@ const TestEngine = (() => {
     testId = EZ.qs("testId");
     if (!testId) return fail("No test specified.");
     if (!EZAuth.currentUser()) {
-      location.href = "/login.html?next=" + encodeURIComponent(location.pathname + location.search);
+      location.href = EZ.url("login.html?next=") + encodeURIComponent(location.pathname + location.search);
       return;
     }
 
     let res;
     try {
-      res = await fetch("/data/tests/" + testId + ".json");
+      res = await fetch("data/tests/" + testId + ".json");
       if (!res.ok) throw new Error("not found");
       testData = await res.json();
     } catch {
       // Fallback: load a demo bank so any listed mock is still attemptable.
       try {
-        res = await fetch("/data/tests/cgl-full-mock-01.json");
+        res = await fetch("data/tests/cgl-full-mock-01.json");
         testData = await res.json();
         testData = { ...testData, testName: (EZ.qs("title") || testData.testName) + " (Demo questions)", _demo: true };
       } catch {
@@ -45,7 +45,7 @@ const TestEngine = (() => {
     const wantsPremium = testData.isPremium || EZ.qs("premium") === "1";
     if (wantsPremium && !EZAuth.isPremium()) {
       alert("This is a Premium test. Redirecting to pricing.");
-      location.href = "/pricing.html";
+      location.href = EZ.url("pricing.html");
       return;
     }
 
@@ -82,7 +82,7 @@ const TestEngine = (() => {
 
   function fail(msg) {
     document.getElementById("app").innerHTML =
-      `<div class="container page"><div class="empty-state"><div class="big">⚠️</div>${msg}<br><a href="/exams/index.html">Back to exams</a></div></div>`;
+      `<div class="container page"><div class="empty-state"><div class="big">⚠️</div>${msg}<br><a href="exams/index.html">Back to exams</a></div></div>`;
   }
 
   /* ---------- Rendering ---------- */
@@ -321,7 +321,7 @@ const TestEngine = (() => {
     EZ.set("ez_results", all);
     EZ.del(progressKey());
 
-    location.href = "/result/index.html?id=" + resultId;
+    location.href = EZ.url("result/index.html?id=") + resultId;
   }
 
   return {

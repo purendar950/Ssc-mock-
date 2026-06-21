@@ -2,10 +2,11 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
+  <script>document.write('<base href="'+(location.hostname.endsWith(".github.io")?"/"+location.pathname.split("/")[1]+"/":"/")+'">')</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#2563eb" />
   <title>Result — ExamZen</title>
-  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="css/style.css" />
   <style>
     .score-card { background: linear-gradient(135deg,var(--primary),#7c3aed); color:#fff; border-radius:var(--radius); padding:24px; text-align:center; }
     .score-card .big { font-size:2.6rem; font-weight:800; }
@@ -34,9 +35,9 @@
 
   <div id="ez-bottomnav"></div>
 
-  <script src="/js/firebase-config.js"></script>
-  <script src="/js/auth.js"></script>
-  <script src="/js/utils.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/utils.js"></script>
   <script>
     EZ.mountChrome("");
     const id = EZ.qs("id");
@@ -44,7 +45,7 @@
     const root = document.getElementById("result-root");
 
     if (!r) {
-      root.innerHTML = `<div class="empty-state"><div class="big">🤔</div>Result not found.<br><a href="/exams/index.html">Back to exams</a></div>`;
+      root.innerHTML = `<div class="empty-state"><div class="big">🤔</div>Result not found.<br><a href="exams/index.html">Back to exams</a></div>`;
     } else {
       render();
     }
@@ -85,9 +86,9 @@
         </div>
 
         <div class="row wrap mt-24">
-          <a class="btn btn-primary" href="/test/index.html?testId=${r.testId}">Reattempt</a>
+          <a class="btn btn-primary" href="test/index.html?testId=${r.testId}">Reattempt</a>
           <button class="btn btn-outline" onclick="toggleSolutions()" id="sol-btn">View Solutions</button>
-          <a class="btn btn-outline" href="/profile.html">Back to Profile</a>
+          <a class="btn btn-outline" href="profile.html">Back to Profile</a>
         </div>
 
         <div id="solutions" class="hidden mt-24"></div>`;

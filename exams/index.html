@@ -2,10 +2,11 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
+  <script>document.write('<base href="'+(location.hostname.endsWith(".github.io")?"/"+location.pathname.split("/")[1]+"/":"/")+'">')</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#2563eb" />
   <title>Exams — ExamZen</title>
-  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <main class="page">
@@ -16,14 +17,14 @@
     </div>
   </main>
 
-  <script src="/js/firebase-config.js"></script>
-  <script src="/js/auth.js"></script>
-  <script src="/js/utils.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/utils.js"></script>
   <script>
     EZ.mountChrome("exams");
-    fetch("/data/catalog.json").then(r=>r.json()).then(cat => {
+    fetch("data/catalog.json").then(r=>r.json()).then(cat => {
       document.getElementById("exam-cards").innerHTML = Object.entries(cat).map(([id, e]) => `
-        <a class="exam-card" href="${e.available ? `/exams/portal.html?exam=${id}` : '#'}" style="${e.available?'':'opacity:.55;pointer-events:none'}">
+        <a class="exam-card" href="${e.available ? `exams/portal.html?exam=${id}` : '#'}" style="${e.available?'':'opacity:.55;pointer-events:none'}">
           <div class="ico">${e.emoji}</div>
           <div style="font-weight:800">${e.name}</div>
           <div class="muted" style="font-size:.72rem">${e.available ? 'Tap to open' : 'Coming soon'}</div>
