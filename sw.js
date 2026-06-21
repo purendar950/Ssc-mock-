@@ -1,5 +1,5 @@
 /* ExamZen service worker - cache static shell + question data */
-const CACHE = "examzen-v1";
+const CACHE = "examzen-v2";
 const PRECACHE = [
   "/index.html",
   "/login.html",
@@ -7,8 +7,18 @@ const PRECACHE = [
   "/pricing.html",
   "/buy-premium.html",
   "/saved.html",
+  "/apply-coupon.html",
+  "/partner-dashboard.html",
+  "/admin-vault.html",
+  "/about-us.html",
+  "/contact-us.html",
+  "/privacy-policy.html",
+  "/refund-policy.html",
+  "/terms-conditions.html",
   "/exams/index.html",
   "/exams/portal.html",
+  "/series/index.html",
+  "/series/portal.html",
   "/test/index.html",
   "/result/index.html",
   "/live-test/index.html",
@@ -16,9 +26,11 @@ const PRECACHE = [
   "/css/test.css",
   "/js/utils.js",
   "/js/auth.js",
+  "/js/store.js",
   "/js/firebase-config.js",
   "/js/test-engine.js",
   "/data/catalog.json",
+  "/data/series.json",
   "/manifest.json",
 ];
 

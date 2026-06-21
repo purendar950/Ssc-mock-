@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#2563eb" />
+  <title>Become a Partner — ExamZen</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div id="ez-header"></div>
+
+  <main class="page">
+    <div class="container" style="max-width:560px">
+      <h1 class="section-title">Become a Partner</h1>
+      <div class="card">
+        <p class="muted">Have a Telegram channel, YouTube, or Instagram following? Get your own coupon code. Your audience gets a discount and you earn <b>80% of the discount</b> on every sale.</p>
+      </div>
+
+      <div id="status-box"></div>
+
+      <div class="card mt-16" id="form-box">
+        <form onsubmit="return apply(event)">
+          <div class="field"><label>Phone</label><input class="input" id="phone" required /></div>
+          <div class="field"><label>UPI ID (for payouts)</label><input class="input" id="upi" placeholder="name@bank" required /></div>
+          <div class="field"><label>Social / channel links</label><textarea id="social" rows="2" placeholder="https://t.me/yourchannel" required></textarea></div>
+          <div class="field">
+            <label>Requested coupon code <span class="muted">(letters & numbers, max 10)</span></label>
+            <input class="input" id="code" maxlength="10" pattern="[A-Za-z0-9]+" style="text-transform:uppercase" required />
+            <div class="meta muted" id="code-msg"></div>
+          </div>
+          <button class="btn btn-primary btn-block" type="submit">Submit Application</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <div id="ez-bottomnav"></div>
+
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/utils.js"></script>
+  <script src="/js/store.js"></script>
+  <script>
+    EZ.mountChrome("");
+    if (!EZAuth.requireLogin()) {/* redirected */}
+    const u = EZAuth.currentUser();
+
+    function refresh() {
+      if (!u) return;
+      const existing = EZStore.findPartnerByUser(u.uid);
+      const pending = EZStore.applications().find(a => a.userId === u.uid && a.status === "pending");
+      const box = document.getElementById("status-box");
+      const form = document.getElementById("form-box");
+      if (existing) {
+        form.style.display = "none";
+        box.innerHTML = `<div class="card mt-16"><b>✅ You're an approved partner!</b>
+          <p class="muted mt-8">Your code: <b>${existing.couponCode}</b></p>
+          <a class="btn btn-primary mt-16" href="/partner-dashboard.html">Open Partner Dashboard</a></div>`;
+      } else if (pending) {
+        form.style.display = "none";
+        box.innerHTML = `<div class="card mt-16"><b>⏳ Application pending</b>
+          <p class="muted mt-8">Requested code: <b>${pending.couponCode}</b>. An admin will review it shortly.</p></div>`;
+      } else {
+        form.style.display = "block";
+        box.innerHTML = "";
+      }
+    }
+
+    function apply(e) {
+      e.preventDefault();
+      const code = document.getElementById("code").value.trim().toUpperCase();
+      const msg = document.getElementById("code-msg");
+      if (EZStore.findPartnerByCode(code) || EZStore.resolveCoupon(code).code === "WELCOME") {
+        msg.style.color = "var(--danger)"; msg.textContent = "That code is already taken. Try another.";
+        return false;
+      }
+      EZStore.addApplication({
+        id: "app_" + Date.now(),
+        userId: u.uid, username: u.username, email: u.email,
+        phone: document.getElementById("phone").value,
+        upiId: document.getElementById("upi").value,
+        socialLinks: document.getElementById("social").value,
+        couponCode: code,
+        status: "pending",
+        appliedAt: new Date().toISOString(),
+      });
+      EZ.toast("Application submitted! 🎉");
+      refresh();
+      return false;
+    }
+    refresh();
+  </script>
+</body>
+</html>

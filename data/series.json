@@ -1,0 +1,30 @@
+{
+  "mentorship-2026": {
+    "title": "CGL/CHSL 2026 Mentorship",
+    "subtitle": "Subject-wise + Sectional + Daily Test Plans",
+    "emoji": "🎯",
+    "free": true,
+    "chapters": [
+      { "name": "Week 1 — Reasoning Foundations", "desc": "Analogy, Classification, Series", "testId": "cgl-sectional-reasoning-01" },
+      { "name": "Topic Drill — Blood Relations", "desc": "Focused practice set", "testId": "cgl-subject-blood-relations" },
+      { "name": "Week 2 — Full Mock Checkpoint", "desc": "Simulate the real exam", "testId": "cgl-full-mock-01" }
+    ]
+  },
+  "atoz-v": {
+    "title": "A to Z Vocabulary Series",
+    "subtitle": "SSC 2020–2025 vocabulary compiled",
+    "emoji": "📖",
+    "free": true,
+    "chapters": [
+      { "name": "Synonyms & Antonyms — Set 1", "desc": "High-frequency words", "testId": "chsl-full-mock-01" }
+    ]
+  },
+  "maths-reasoning": {
+    "title": "Mathematics & Reasoning",
+    "subtitle": "Coming soon",
+    "emoji": "➗",
+    "free": true,
+    "comingSoon": true,
+    "chapters": []
+  }
+}

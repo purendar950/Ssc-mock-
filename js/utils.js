@@ -115,11 +115,54 @@ const EZ = (() => {
     document.querySelectorAll("[data-theme-toggle]").forEach((b) => {
       b.addEventListener("click", toggleTheme);
     });
+
+    mountFooter();
+  }
+
+  function mountFooter() {
+    if (document.querySelector(".app-footer")) return;
+    const year = new Date().getFullYear();
+    const f = document.createElement("footer");
+    f.className = "app-footer";
+    f.innerHTML = `
+      <div class="container">
+        <div class="footer-cols">
+          <div>
+            <div class="brand" style="margin-bottom:8px"><span class="logo">EZ</span><span>ExamZen</span></div>
+            <p class="muted" style="font-size:.85rem;max-width:320px">Free & premium mock tests for SSC, Railway and State exams with bilingual questions and All-India ranking.</p>
+          </div>
+          <div>
+            <h5>Prepare</h5>
+            <a href="/exams/index.html">Mock Tests</a>
+            <a href="/live-test/index.html">Live Tests</a>
+            <a href="/series/index.html">Series</a>
+            <a href="/pricing.html">Pricing</a>
+          </div>
+          <div>
+            <h5>Partner</h5>
+            <a href="/apply-coupon.html">Become a Partner</a>
+            <a href="/partner-dashboard.html">Partner Dashboard</a>
+            <a href="/admin-vault.html">Admin</a>
+          </div>
+          <div>
+            <h5>Company</h5>
+            <a href="/about-us.html">About Us</a>
+            <a href="/contact-us.html">Contact</a>
+            <a href="/privacy-policy.html">Privacy Policy</a>
+            <a href="/refund-policy.html">Refund Policy</a>
+            <a href="/terms-conditions.html">Terms &amp; Conditions</a>
+          </div>
+        </div>
+        <div class="footer-bottom">© ${year} ExamZen. All rights reserved.</div>
+      </div>`;
+    // Insert before bottom-nav host if present, else append to body.
+    const navHost = document.getElementById("ez-bottomnav");
+    document.body.insertBefore(f, navHost || null);
   }
 
   return {
     initTheme, toggleTheme, toast, get, set, del,
-    fmtTime, fmtDuration, qs, mountChrome,
+    fmtTime, fmtDuration, qs, mountChrome, mountFooter,
   };
 })();
 
