@@ -1,0 +1,18 @@
+{
+  "examCode": "MTS",
+  "examName": "SSC MTS",
+  "config": { "tier1": { "sections": [
+    {"id":"REASONING","name":"Reasoning & Problem Solving","qs":20,"marks":60},
+    {"id":"MATHS","name":"Numerical & Mathematical Ability","qs":20,"marks":60},
+    {"id":"GK","name":"General Awareness","qs":25,"marks":75},
+    {"id":"ENGLISH","name":"English Language","qs":25,"marks":75}
+  ] } },
+  "data": { "tier1": { "2025": {
+    "full_mocks": [
+      {"id":"mts-full-mock-01","title":"MTS Full Mock 1","type":"free","qs":90,"time":"90 Min","marks":270},
+      {"id":"mts-full-mock-02","title":"MTS Full Mock 2","type":"paid","qs":90,"time":"90 Min","marks":270}
+    ],
+    "sectional": [],
+    "subject_wise": []
+  } } }
+}

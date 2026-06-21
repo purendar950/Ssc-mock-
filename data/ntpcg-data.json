@@ -1,0 +1,17 @@
+{
+  "examCode": "NTPCG",
+  "examName": "RRB NTPC Graduate Level",
+  "config": { "tier1": { "sections": [
+    {"id":"MATHS","name":"Mathematics","qs":30,"marks":30},
+    {"id":"REASONING","name":"General Intelligence & Reasoning","qs":30,"marks":30},
+    {"id":"GK","name":"General Awareness","qs":40,"marks":40}
+  ] } },
+  "data": { "tier1": { "2025": {
+    "full_mocks": [
+      {"id":"ntpcg-cbt1-mock-01","title":"NTPC (Graduate) CBT-1 Mock 1","type":"free","qs":100,"time":"90 Min","marks":100},
+      {"id":"ntpcg-cbt1-mock-02","title":"NTPC (Graduate) CBT-1 Mock 2","type":"paid","qs":100,"time":"90 Min","marks":100}
+    ],
+    "sectional": [],
+    "subject_wise": []
+  } } }
+}

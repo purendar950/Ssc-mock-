@@ -1,0 +1,17 @@
+{
+  "examCode": "NTPC",
+  "examName": "RRB NTPC",
+  "config": { "tier1": { "sections": [
+    {"id":"MATHS","name":"Mathematics","qs":30,"marks":30},
+    {"id":"REASONING","name":"General Intelligence & Reasoning","qs":30,"marks":30},
+    {"id":"GK","name":"General Awareness","qs":40,"marks":40}
+  ] } },
+  "data": { "tier1": { "2025": {
+    "full_mocks": [
+      {"id":"railway-ntpc-mock-01","title":"NTPC CBT-1 Full Mock 1","type":"free","qs":100,"time":"90 Min","marks":100},
+      {"id":"ntpc-cbt1-mock-02","title":"NTPC CBT-1 Full Mock 2","type":"paid","qs":100,"time":"90 Min","marks":100}
+    ],
+    "sectional": [],
+    "subject_wise": []
+  } } }
+}

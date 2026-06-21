@@ -1,0 +1,17 @@
+{
+  "examCode": "STENO",
+  "examName": "SSC Stenographer",
+  "config": { "tier1": { "sections": [
+    {"id":"REASONING","name":"General Intelligence & Reasoning","qs":50,"marks":50},
+    {"id":"GK","name":"General Awareness","qs":50,"marks":50},
+    {"id":"ENGLISH","name":"English Language & Comprehension","qs":100,"marks":100}
+  ] } },
+  "data": { "tier1": { "2025": {
+    "full_mocks": [
+      {"id":"steno-full-mock-01","title":"Steno Grade C & D Mock 1","type":"free","qs":200,"time":"120 Min","marks":200},
+      {"id":"steno-full-mock-02","title":"Steno Grade C & D Mock 2","type":"paid","qs":200,"time":"120 Min","marks":200}
+    ],
+    "sectional": [],
+    "subject_wise": []
+  } } }
+}

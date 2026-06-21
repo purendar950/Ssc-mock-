@@ -1,0 +1,18 @@
+{
+  "examCode": "ALP",
+  "examName": "RRB ALP",
+  "config": { "tier1": { "sections": [
+    {"id":"MATHS","name":"Mathematics","qs":20,"marks":20},
+    {"id":"REASONING","name":"Mental Ability & Reasoning","qs":25,"marks":25},
+    {"id":"SCIENCE","name":"General Science","qs":20,"marks":20},
+    {"id":"GK","name":"General Awareness","qs":10,"marks":10}
+  ] } },
+  "data": { "tier1": { "2025": {
+    "full_mocks": [
+      {"id":"alp-cbt1-mock-01","title":"ALP CBT-1 Mock 1","type":"free","qs":75,"time":"60 Min","marks":75},
+      {"id":"alp-cbt1-mock-02","title":"ALP CBT-1 Mock 2","type":"paid","qs":75,"time":"60 Min","marks":75}
+    ],
+    "sectional": [],
+    "subject_wise": []
+  } } }
+}

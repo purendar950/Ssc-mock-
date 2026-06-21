@@ -1,0 +1,18 @@
+{
+  "examCode": "CPO",
+  "examName": "SSC CPO",
+  "config": { "tier1": { "sections": [
+    {"id":"REASONING","name":"General Intelligence & Reasoning","qs":50,"marks":50},
+    {"id":"GK","name":"General Knowledge & Awareness","qs":50,"marks":50},
+    {"id":"MATHS","name":"Quantitative Aptitude","qs":50,"marks":50},
+    {"id":"ENGLISH","name":"English Comprehension","qs":50,"marks":50}
+  ] } },
+  "data": { "tier1": { "2025": {
+    "full_mocks": [
+      {"id":"cpo-full-mock-01","title":"CPO Paper-I Full Mock 1","type":"free","qs":200,"time":"120 Min","marks":200},
+      {"id":"cpo-full-mock-02","title":"CPO Paper-I Full Mock 2","type":"paid","qs":200,"time":"120 Min","marks":200}
+    ],
+    "sectional": [],
+    "subject_wise": []
+  } } }
+}

@@ -1,0 +1,18 @@
+{
+  "examCode": "PHASE",
+  "examName": "SSC Selection Posts (Phase)",
+  "config": { "tier1": { "sections": [
+    {"id":"REASONING","name":"General Intelligence","qs":25,"marks":50},
+    {"id":"GK","name":"General Awareness","qs":25,"marks":50},
+    {"id":"MATHS","name":"Quantitative Aptitude","qs":25,"marks":50},
+    {"id":"ENGLISH","name":"English Language","qs":25,"marks":50}
+  ] } },
+  "data": { "tier1": { "2025": {
+    "full_mocks": [
+      {"id":"phase-full-mock-01","title":"Selection Posts Phase Mock 1","type":"free","qs":100,"time":"60 Min","marks":200},
+      {"id":"phase-full-mock-02","title":"Selection Posts Phase Mock 2","type":"paid","qs":100,"time":"60 Min","marks":200}
+    ],
+    "sectional": [],
+    "subject_wise": []
+  } } }
+}

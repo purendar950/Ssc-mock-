@@ -1,6 +1,39 @@
 {
-  "cgl":     { "name": "SSC CGL",     "emoji": "📘", "available": true,  "dataFile": "cgl-data.json" },
-  "chsl":    { "name": "SSC CHSL",    "emoji": "📗", "available": true,  "dataFile": "chsl-data.json" },
-  "railway": { "name": "Railway NTPC","emoji": "🚆", "available": true,  "dataFile": "railway-data.json" },
-  "mts":     { "name": "SSC MTS",     "emoji": "📙", "available": false, "dataFile": "mts-data.json" }
+  "categories": [
+    {
+      "id": "ssc",
+      "name": "SSC",
+      "icon": "fa-building-columns",
+      "exams": [
+        { "id": "cgl",   "name": "SSC CGL",   "subtitle": "Combined Graduate Level",          "emoji": "📘", "available": true,  "dataFile": "cgl-data.json" },
+        { "id": "chsl",  "name": "SSC CHSL",  "subtitle": "Combined Higher Secondary Level",  "emoji": "📗", "available": true,  "dataFile": "chsl-data.json" },
+        { "id": "mts",   "name": "SSC MTS",   "subtitle": "Multi Tasking Staff",              "emoji": "📙", "available": true,  "dataFile": "mts-data.json" },
+        { "id": "cpo",   "name": "SSC CPO",   "subtitle": "Central Police Organization",      "emoji": "🚔", "available": true,  "dataFile": "cpo-data.json" },
+        { "id": "steno", "name": "SSC STENO", "subtitle": "Stenographer Grade C & D",         "emoji": "⌨️", "available": true,  "dataFile": "steno-data.json" },
+        { "id": "phase", "name": "SSC PHASE", "subtitle": "Selection Posts Phase",            "emoji": "📝", "available": true,  "dataFile": "phase-data.json" },
+        { "id": "gd",    "name": "SSC GD",    "subtitle": "Constable (General Duty)",         "emoji": "🪖", "available": true,  "dataFile": "gd-data.json" }
+      ]
+    },
+    {
+      "id": "railway",
+      "name": "Railway Selection",
+      "icon": "fa-train",
+      "exams": [
+        { "id": "ntpcg",  "name": "RRB NTPC Graduate Level", "subtitle": "Non-Technical Popular Categories", "emoji": "🚆", "available": true, "dataFile": "ntpcg-data.json" },
+        { "id": "ntpc",   "name": "RRB NTPC",                "subtitle": "Non-Technical Popular Categories", "emoji": "🚉", "available": true, "dataFile": "ntpc-data.json" },
+        { "id": "groupd", "name": "RRB Group D",             "subtitle": "Level 1 Post",                     "emoji": "🛤️", "available": true, "dataFile": "groupd-data.json" },
+        { "id": "alp",    "name": "RRB ALP",                 "subtitle": "Assistant Loco Pilot",             "emoji": "🚂", "available": true, "dataFile": "alp-data.json" }
+      ]
+    },
+    {
+      "id": "state",
+      "name": "State Exams",
+      "icon": "fa-landmark",
+      "exams": [
+        { "id": "uppcs",    "name": "UPPSC PCS",      "subtitle": "UP Provincial Civil Services", "emoji": "🏛️", "available": false },
+        { "id": "uppolice", "name": "UP Police",      "subtitle": "Constable & SI",               "emoji": "👮", "available": false },
+        { "id": "patwari",  "name": "Patwari / Lekhpal", "subtitle": "Revenue Department",        "emoji": "🧾", "available": false }
+      ]
+    }
+  ]
 }

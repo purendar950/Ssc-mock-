@@ -42,18 +42,26 @@
   <script>
     EZ.mountChrome("exams");
     const examId = EZ.qs("exam") || "cgl";
+    const wantTab = EZ.qs("tab"); // optional: full_mocks | sectional | subject_wise
     const CATS = [["full_mocks","Full Mocks"],["sectional","Sectionals"],["subject_wise","Subject Wise"]];
-    let exam = null, tier = null, year = null, cat = "full_mocks";
+    let exam = null, tier = null, year = null, cat = wantTab || "full_mocks";
 
-    fetch("data/catalog.json").then(r=>r.json()).then(cat => {
-      const meta = cat[examId];
-      if (!meta) throw new Error("no exam");
+    fetch("data/catalog.json").then(r=>r.json()).then(catalog => {
+      const all = (catalog.categories || []).flatMap(c => c.exams || []);
+      const meta = all.find(e => e.id === examId);
+      if (!meta || !meta.dataFile) throw new Error("no exam");
+      document.getElementById("exam-title").textContent = meta.name + " Mock Tests";
+      if (meta.subtitle) {
+        const sub = document.createElement("p");
+        sub.className = "muted"; sub.style.marginTop = "-6px"; sub.textContent = meta.subtitle;
+        document.getElementById("exam-title").after(sub);
+      }
       return fetch("data/" + meta.dataFile);
     }).then(r=>r.json()).then(d => {
       exam = d;
-      document.getElementById("exam-title").textContent = (d.examName || d.examCode) + " Mock Tests";
       tier = Object.keys(d.data)[0];
       pickYear();
+      if (!CATS.some(([k]) => k === cat)) cat = "full_mocks";
       renderTierTabs(); renderYearTabs(); renderCatTabs(); renderList();
     }).catch(()=> {
       document.getElementById("mock-list").innerHTML = '<div class="empty-state">Could not load tests. Serve over HTTP (not file://).</div>';
