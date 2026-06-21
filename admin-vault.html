@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#2563eb" />
+  <title>Admin Vault — ExamZen</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div id="ez-header"></div>
+
+  <main class="page">
+    <div class="container">
+      <h1 class="section-title">🔐 Admin Vault</h1>
+      <div id="gate"></div>
+      <div id="panel" class="hidden">
+        <div class="stat-grid" id="stats"></div>
+        <div class="tabs mt-24" id="tabs">
+          <button class="active" data-tab="buy" onclick="switchTab('buy')">💰 Buy Requests</button>
+          <button data-tab="partners" onclick="switchTab('partners')">🎁 Partner Requests</button>
+          <button data-tab="payouts" onclick="switchTab('payouts')">💵 Payouts</button>
+          <button data-tab="ledger" onclick="switchTab('ledger')">📊 Ledger</button>
+        </div>
+        <div id="tab-content"></div>
+      </div>
+    </div>
+  </main>
+
+  <div id="ez-bottomnav"></div>
+
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/utils.js"></script>
+  <script src="/js/store.js"></script>
+  <script>
+    EZ.mountChrome("");
+    if (!EZAuth.requireLogin()) {/* redirected */}
+    const u = EZAuth.currentUser();
+    let tab = "buy";
+
+    function isAdmin() {
+      const cu = EZAuth.currentUser();
+      return cu && (cu.isAdmin === true || cu.username.toLowerCase() === "admin");
+    }
+
+    function boot() {
+      if (!isAdmin()) {
+        document.getElementById("gate").innerHTML = `
+          <div class="card center">
+            <p class="muted">This area is restricted to administrators.</p>
+            <p class="muted mt-8" style="font-size:.82rem">Demo mode: you can grant yourself admin access to explore the panel. In production this is set by <code>isAdmin: true</code> in Firestore.</p>
+            <button class="btn btn-primary mt-16" onclick="claimAdmin()">Enable admin access (demo)</button>
+          </div>`;
+        return;
+      }
+      document.getElementById("gate").innerHTML = "";
+      document.getElementById("panel").classList.remove("hidden");
+      renderStats();
+      switchTab(tab);
+    }
+
+    function claimAdmin() {
+      EZAuth.updateUser({ isAdmin: true });
+      EZ.toast("Admin access enabled");
+      boot();
+    }
+
+    function renderStats() {
+      const users = JSON.parse(localStorage.getItem("ez_users") || "{}");
+      const userArr = Object.values(users);
+      const premium = userArr.filter(x => x.plan === "premium").length;
+      const revenue = EZStore.payments().filter(p => p.status === "approved").reduce((s,p)=> s + (p.amount||0), 0);
+      document.getElementById("stats").innerHTML = `
+        <div class="stat-card"><div class="num">${userArr.length}</div><div class="lbl">Registered Users</div></div>
+        <div class="stat-card"><div class="num">${premium}</div><div class="lbl">Premium Users</div></div>
+        <div class="stat-card"><div class="num">₹${revenue}</div><div class="lbl">Total Revenue</div></div>
+        <div class="stat-card"><div class="num">${EZStore.partners().length}</div><div class="lbl">Active Partners</div></div>`;
+    }
+
+    function switchTab(t) {
+      tab = t;
+      document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("active", b.dataset.tab===t));
+      const c = document.getElementById("tab-content");
+      if (t === "buy") c.innerHTML = buyTab();
+      else if (t === "partners") c.innerHTML = partnerTab();
+      else if (t === "payouts") c.innerHTML = payoutTab();
+      else c.innerHTML = ledgerTab();
+    }
+
+    /* ---------- Buy requests ---------- */
+    function buyTab() {
+      const reqs = EZStore.payments().sort((a,b)=> new Date(b.submittedAt)-new Date(a.submittedAt));
+      const pending = reqs.filter(r=>r.status==="pending");
+      if (!reqs.length) return `<div class="empty-state">No payment requests yet.</div>`;
+      return `
+        <h3 class="section-title">Pending (${pending.length})</h3>
+        ${rows(pending, true)}
+        <h3 class="section-title">History</h3>
+        ${rows(reqs.filter(r=>r.status!=="pending"), false)}`;
+      function rows(list, actions) {
+        if (!list.length) return `<div class="muted" style="padding:8px">None.</div>`;
+        return `<div class="card table-wrap" style="padding:0"><table class="data-table">
+          <thead><tr><th>User</th><th>UTR</th><th>Amount</th><th>Coupon</th><th>${actions?'Actions':'Status'}</th></tr></thead>
+          <tbody>${list.map(r=>`<tr>
+            <td>${r.username}<div class="meta muted">${r.email}</div></td>
+            <td>${r.utr}</td>
+            <td>₹${r.amount}</td>
+            <td>${r.couponUsed||'NONE'}</td>
+            <td>${actions
+              ? `<button class="btn btn-sm btn-success" onclick="approveBuy('${r.id}')">✅ Approve</button>
+                 <button class="btn btn-sm btn-danger" onclick="rejectBuy('${r.id}')">❌ Reject</button>`
+              : `<span class="status-pill status-${r.status}">${r.status}</span>`}</td>
+          </tr>`).join("")}</tbody></table></div>`;
+      }
+    }
+    function approveBuy(id){ EZStore.approvePayment(id, u.uid); EZ.toast("Approved & premium granted"); renderStats(); switchTab("buy"); }
+    function rejectBuy(id){ EZStore.rejectPayment(id, u.uid); EZ.toast("Rejected"); switchTab("buy"); }
+
+    /* ---------- Partner requests ---------- */
+    function partnerTab() {
+      const apps = EZStore.applications().sort((a,b)=> new Date(b.appliedAt)-new Date(a.appliedAt));
+      const pending = apps.filter(a=>a.status==="pending");
+      if (!apps.length) return `<div class="empty-state">No partner applications yet.</div>`;
+      return `
+        <h3 class="section-title">Pending (${pending.length})</h3>
+        ${rows(pending, true)}
+        <h3 class="section-title">History</h3>
+        ${rows(apps.filter(a=>a.status!=="pending"), false)}`;
+      function rows(list, actions){
+        if (!list.length) return `<div class="muted" style="padding:8px">None.</div>`;
+        return `<div class="card table-wrap" style="padding:0"><table class="data-table">
+          <thead><tr><th>User</th><th>Code</th><th>UPI</th><th>Links</th><th>${actions?'Actions':'Status'}</th></tr></thead>
+          <tbody>${list.map(a=>`<tr>
+            <td>${a.username}<div class="meta muted">${a.phone||''}</div></td>
+            <td><b>${a.couponCode}</b></td>
+            <td>${a.upiId}</td>
+            <td style="max-width:160px;word-break:break-all">${a.socialLinks||''}</td>
+            <td>${actions
+              ? `<button class="btn btn-sm btn-success" onclick="approveApp('${a.id}')">Approve</button>
+                 <button class="btn btn-sm btn-danger" onclick="rejectApp('${a.id}')">Reject</button>`
+              : `<span class="status-pill status-${a.status}">${a.status}</span>`}</td>
+          </tr>`).join("")}</tbody></table></div>`;
+      }
+    }
+    function approveApp(id){ if(EZStore.approveApplication(id)){EZ.toast("Partner approved");} else {EZ.toast("Could not approve (code taken?)");} renderStats(); switchTab("partners"); }
+    function rejectApp(id){ EZStore.rejectApplication(id); EZ.toast("Rejected"); switchTab("partners"); }
+
+    /* ---------- Payouts ---------- */
+    function payoutTab() {
+      const pos = EZStore.payouts().sort((a,b)=> new Date(b.requestedAt)-new Date(a.requestedAt));
+      const pending = pos.filter(p=>p.status==="pending");
+      if (!pos.length) return `<div class="empty-state">No payout requests yet.</div>`;
+      return `
+        <h3 class="section-title">Pending (${pending.length})</h3>
+        ${rows(pending, true)}
+        <h3 class="section-title">History</h3>
+        ${rows(pos.filter(p=>p.status!=="pending"), false)}`;
+      function rows(list, actions){
+        if (!list.length) return `<div class="muted" style="padding:8px">None.</div>`;
+        return `<div class="card table-wrap" style="padding:0"><table class="data-table">
+          <thead><tr><th>Partner</th><th>Amount</th><th>UPI</th><th>${actions?'Actions':'Status'}</th></tr></thead>
+          <tbody>${list.map(p=>`<tr>
+            <td>${p.couponCode}</td>
+            <td>₹${p.amount}</td>
+            <td>${p.upiId}</td>
+            <td>${actions
+              ? `<button class="btn btn-sm btn-success" onclick="payPo('${p.id}')">Mark Paid</button>
+                 <button class="btn btn-sm btn-danger" onclick="rejPo('${p.id}')">Reject</button>`
+              : `<span class="status-pill status-${p.status}">${p.status}</span>`}</td>
+          </tr>`).join("")}</tbody></table></div>`;
+      }
+    }
+    function payPo(id){ EZStore.payPayout(id); EZ.toast("Marked paid"); switchTab("payouts"); }
+    function rejPo(id){ EZStore.rejectPayout(id); EZ.toast("Rejected"); switchTab("payouts"); }
+
+    /* ---------- Ledger ---------- */
+    function ledgerTab() {
+      const ps = EZStore.partners();
+      if (!ps.length) return `<div class="empty-state">No partners yet.</div>`;
+      return `<div class="card table-wrap" style="padding:0"><table class="data-table">
+        <thead><tr><th>Code</th><th>Partner</th><th>Sales</th><th>Earned</th><th>Available</th><th>Withdrawn</th></tr></thead>
+        <tbody>${ps.map(p=>`<tr>
+          <td><b>${p.couponCode}</b></td>
+          <td>${p.username}</td>
+          <td>${p.totalSales||0}</td>
+          <td>₹${p.totalRevenue||0}</td>
+          <td>₹${p.pendingPayout||0}</td>
+          <td>₹${p.totalWithdrawn||0}</td>
+        </tr>`).join("")}</tbody></table></div>`;
+    }
+
+    boot();
+  </script>
+</body>
+</html>

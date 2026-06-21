@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#2563eb" />
+  <title>Partner Dashboard — ExamZen</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div id="ez-header"></div>
+
+  <main class="page">
+    <div class="container" style="max-width:820px">
+      <h1 class="section-title">Partner Dashboard</h1>
+      <div id="dash-root"></div>
+    </div>
+  </main>
+
+  <div id="ez-bottomnav"></div>
+
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/utils.js"></script>
+  <script src="/js/store.js"></script>
+  <script>
+    EZ.mountChrome("");
+    if (!EZAuth.requireLogin()) {/* redirected */}
+    const u = EZAuth.currentUser();
+    const MIN_PAYOUT = 100;
+
+    function render() {
+      const root = document.getElementById("dash-root");
+      const p = EZStore.findPartnerByUser(u.uid);
+      if (!p) {
+        root.innerHTML = `<div class="empty-state"><div class="big">🤝</div>You're not a partner yet.<br><a href="/apply-coupon.html">Apply to become a partner →</a></div>`;
+        return;
+      }
+      const link = location.origin + "/buy-premium.html?ref=" + p.couponCode;
+      const payouts = EZStore.payouts().filter(x => x.couponCode === p.couponCode)
+        .sort((a,b)=> new Date(b.requestedAt) - new Date(a.requestedAt));
+
+      root.innerHTML = `
+        <div class="stat-grid">
+          <div class="stat-card"><div class="num">${p.totalSales||0}</div><div class="lbl">Total Sales</div></div>
+          <div class="stat-card"><div class="num">₹${p.totalRevenue||0}</div><div class="lbl">Total Earned</div></div>
+          <div class="stat-card"><div class="num">₹${p.pendingPayout||0}</div><div class="lbl">Available</div></div>
+          <div class="stat-card"><div class="num">₹${p.totalWithdrawn||0}</div><div class="lbl">Withdrawn</div></div>
+        </div>
+
+        <div class="card mt-24">
+          <b>Your referral link</b>
+          <div class="row mt-8">
+            <input class="input" id="reflink" value="${link}" readonly />
+            <button class="btn btn-outline" onclick="copyLink()">Copy</button>
+          </div>
+          <div class="meta muted mt-8">Coupon code: <b>${p.couponCode}</b> • Buyers pay ₹99 (₹25 off). You earn ₹${Math.round(25*EZStore.COMMISSION_RATE)} per sale.</div>
+        </div>
+
+        <div class="card mt-16">
+          <div class="row between">
+            <b>Request payout</b>
+            <span class="muted">Min ₹${MIN_PAYOUT}</span>
+          </div>
+          <div class="row mt-8">
+            <input class="input" id="payout-amt" type="number" min="${MIN_PAYOUT}" max="${p.pendingPayout||0}" placeholder="Amount (₹)" />
+            <button class="btn btn-primary" onclick="requestPayout()" ${(p.pendingPayout||0) < MIN_PAYOUT ? 'disabled' : ''}>Request</button>
+          </div>
+          ${(p.pendingPayout||0) < MIN_PAYOUT ? `<div class="meta muted mt-8">You need at least ₹${MIN_PAYOUT} available to request a payout.</div>` : ''}
+        </div>
+
+        <h2 class="section-title">Payout history</h2>
+        ${payouts.length ? `<div class="card table-wrap" style="padding:0">
+          <table class="data-table">
+            <thead><tr><th>Date</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody>${payouts.map(x=>`<tr>
+              <td>${new Date(x.requestedAt).toLocaleDateString()}</td>
+              <td>₹${x.amount}</td>
+              <td><span class="status-pill status-${x.status}">${x.status}</span></td>
+            </tr>`).join("")}</tbody>
+          </table></div>` : `<div class="empty-state">No payouts requested yet.</div>`}
+      `;
+    }
+
+    function copyLink() {
+      const el = document.getElementById("reflink");
+      el.select(); navigator.clipboard?.writeText(el.value);
+      EZ.toast("Link copied!");
+    }
+
+    function requestPayout() {
+      const p = EZStore.findPartnerByUser(u.uid);
+      const amt = parseInt(document.getElementById("payout-amt").value, 10);
+      if (!amt || amt < MIN_PAYOUT) { EZ.toast("Minimum payout is ₹" + MIN_PAYOUT); return; }
+      if (amt > (p.pendingPayout||0)) { EZ.toast("Amount exceeds available balance"); return; }
+      EZStore.addPayout({
+        id: "po_" + Date.now(),
+        partnerId: p.userId, couponCode: p.couponCode,
+        amount: amt, upiId: p.upiId, status: "pending",
+        requestedAt: new Date().toISOString(),
+      });
+      EZ.toast("Payout requested ✅");
+      render();
+    }
+    render();
+  </script>
+</body>
+</html>

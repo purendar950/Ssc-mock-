@@ -161,3 +161,46 @@ service cloud.firestore {
   Real auth must use Firebase Auth (or another provider) which handles hashing.
 - The All-India rank in Local Mode is computed from attempts stored on the same
   device. With Firebase, query `testResults` ordered by score.
+
+
+---
+
+## 🧑‍💼 Admin, Partner & Monetization (added)
+
+The platform now includes a full manual-UPI monetization flow:
+
+- **`buy-premium.html`** — apply a coupon (`WELCOME` or any active partner code, or a
+  `?ref=CODE` referral link), pay via UPI, and submit the UTR. The request is saved as
+  **pending**.
+- **`admin-vault.html`** — admin panel (gated by `isAdmin` or username `admin`; in demo
+  mode there's a one-click "Enable admin access" button). Manage:
+  - **Buy Requests** — approve (grants the buyer Premium for 365 days and credits the
+    partner) or reject.
+  - **Partner Requests** — approve applications (creates a partner + coupon code).
+  - **Payouts** — mark partner payout requests paid.
+  - **Ledger** — per-partner sales/earnings/withdrawals.
+- **`apply-coupon.html`** — users apply to become partners.
+- **`partner-dashboard.html`** — partners see sales, earnings, referral link, and can
+  request payouts (min ₹100). Partners earn **80% of the discount** per sale.
+
+Plus **legal pages** (about, contact, privacy, refund, terms) and a **Series** hub
+(`series/index.html` + `series/portal.html?series=ID`, data in `data/series.json`),
+all linked from a site-wide footer.
+
+### End-to-end demo flow
+1. Register as user **A**, go to **Buy Premium**, submit a payment (try coupon `WELCOME`).
+2. Go to **Admin Vault** → *Enable admin access* → **Buy Requests** → Approve. User A is now Premium.
+3. Register/log in as user **B**, **Apply to become a Partner** with code e.g. `REX10`.
+4. As admin, approve the partner request. Share `buy-premium.html?ref=REX10`.
+5. A new buyer using `REX10` → admin approves → partner B's dashboard shows the sale & earnings.
+
+## 🚀 Deployment (GitHub Pages via Actions)
+
+`.github/workflows/deploy.yml` deploys the site to GitHub Pages on every push to `main`.
+It uses `actions/configure-pages` with `enablement: true`, so Pages is enabled
+automatically (no manual settings toggle needed) on the first successful run.
+
+After the workflow completes, the site is live at:
+`https://<owner>.github.io/<repo>/`
+
+`.nojekyll` is included so all files are served as-is.
