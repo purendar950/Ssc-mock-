@@ -1,0 +1,182 @@
+{
+  "testId": "cgl-full-mock-01",
+  "testName": "SSC CGL Tier-I Full Mock 1",
+  "examType": "CGL",
+  "tier": "1",
+  "duration": 600,
+  "totalQuestions": 8,
+  "totalMarks": 16,
+  "marksPerQuestion": 2,
+  "negativeMarking": 0.5,
+  "isPremium": false,
+  "sections": [
+    {
+      "sectionId": "reasoning",
+      "sectionName": "General Intelligence & Reasoning",
+      "questions": [
+        {
+          "en": "If A is the brother of B, and B is the sister of C, what is A to C?",
+          "hi": "यदि A, B का भाई है और B, C की बहन है, तो A, C का क्या है?",
+          "options": {
+            "A": { "en": "Brother", "hi": "भाई" },
+            "B": { "en": "Sister", "hi": "बहन" },
+            "C": { "en": "Cannot be determined", "hi": "निर्धारित नहीं किया जा सकता" },
+            "D": { "en": "Uncle", "hi": "चाचा" }
+          },
+          "correct": "A",
+          "explanation": {
+            "en": "A is male (brother of B). B and C are siblings, so A is also a sibling of C — specifically a brother.",
+            "hi": "A पुरुष है (B का भाई)। B और C भाई-बहन हैं, इसलिए A भी C का भाई है।"
+          },
+          "topic": "Blood Relations",
+          "subject": "Reasoning",
+          "difficulty": "easy"
+        },
+        {
+          "en": "Find the next term in the series: 2, 6, 12, 20, 30, ?",
+          "hi": "श्रृंखला में अगला पद ज्ञात कीजिए: 2, 6, 12, 20, 30, ?",
+          "options": {
+            "A": { "en": "40", "hi": "40" },
+            "B": { "en": "42", "hi": "42" },
+            "C": { "en": "44", "hi": "44" },
+            "D": { "en": "46", "hi": "46" }
+          },
+          "correct": "B",
+          "explanation": {
+            "en": "Differences are 4, 6, 8, 10, 12. So 30 + 12 = 42.",
+            "hi": "अंतर 4, 6, 8, 10, 12 हैं। अतः 30 + 12 = 42।"
+          },
+          "topic": "Number Series",
+          "subject": "Reasoning",
+          "difficulty": "easy"
+        }
+      ]
+    },
+    {
+      "sectionId": "ga",
+      "sectionName": "General Awareness",
+      "questions": [
+        {
+          "en": "Who is known as the 'Father of the Indian Constitution'?",
+          "hi": "'भारतीय संविधान के जनक' के रूप में किसे जाना जाता है?",
+          "options": {
+            "A": { "en": "Mahatma Gandhi", "hi": "महात्मा गांधी" },
+            "B": { "en": "Jawaharlal Nehru", "hi": "जवाहरलाल नेहरू" },
+            "C": { "en": "B. R. Ambedkar", "hi": "बी. आर. अंबेडकर" },
+            "D": { "en": "Sardar Patel", "hi": "सरदार पटेल" }
+          },
+          "correct": "C",
+          "explanation": {
+            "en": "Dr. B. R. Ambedkar chaired the Drafting Committee and is called the Father of the Indian Constitution.",
+            "hi": "डॉ. बी. आर. अंबेडकर प्रारूप समिति के अध्यक्ष थे और उन्हें भारतीय संविधान का जनक कहा जाता है।"
+          },
+          "topic": "Polity",
+          "subject": "GA",
+          "difficulty": "easy"
+        },
+        {
+          "en": "The Tropic of Cancer does NOT pass through which Indian state?",
+          "hi": "कर्क रेखा भारत के किस राज्य से होकर नहीं गुजरती है?",
+          "options": {
+            "A": { "en": "Gujarat", "hi": "गुजरात" },
+            "B": { "en": "Rajasthan", "hi": "राजस्थान" },
+            "C": { "en": "Odisha", "hi": "ओडिशा" },
+            "D": { "en": "Maharashtra", "hi": "महाराष्ट्र" }
+          },
+          "correct": "D",
+          "explanation": {
+            "en": "The Tropic of Cancer passes through 8 Indian states; Maharashtra is not one of them.",
+            "hi": "कर्क रेखा भारत के 8 राज्यों से होकर गुजरती है; महाराष्ट्र उनमें शामिल नहीं है।"
+          },
+          "topic": "Geography",
+          "subject": "GA",
+          "difficulty": "medium"
+        }
+      ]
+    },
+    {
+      "sectionId": "quant",
+      "sectionName": "Quantitative Aptitude",
+      "questions": [
+        {
+          "en": "A shopkeeper sells an item for ₹440 at a 10% profit. What was the cost price?",
+          "hi": "एक दुकानदार किसी वस्तु को 10% लाभ पर ₹440 में बेचता है। क्रय मूल्य क्या था?",
+          "options": {
+            "A": { "en": "₹400", "hi": "₹400" },
+            "B": { "en": "₹396", "hi": "₹396" },
+            "C": { "en": "₹420", "hi": "₹420" },
+            "D": { "en": "₹484", "hi": "₹484" }
+          },
+          "correct": "A",
+          "explanation": {
+            "en": "CP = SP / 1.10 = 440 / 1.10 = ₹400.",
+            "hi": "क्रय मूल्य = विक्रय मूल्य / 1.10 = 440 / 1.10 = ₹400।"
+          },
+          "topic": "Profit & Loss",
+          "subject": "Quant",
+          "difficulty": "easy"
+        },
+        {
+          "en": "If 3 workers build a wall in 12 days, how many days will 4 workers take (same rate)?",
+          "hi": "यदि 3 श्रमिक एक दीवार 12 दिनों में बनाते हैं, तो 4 श्रमिक (समान दर) कितने दिनों में बनाएंगे?",
+          "options": {
+            "A": { "en": "16 days", "hi": "16 दिन" },
+            "B": { "en": "9 days", "hi": "9 दिन" },
+            "C": { "en": "8 days", "hi": "8 दिन" },
+            "D": { "en": "10 days", "hi": "10 दिन" }
+          },
+          "correct": "B",
+          "explanation": {
+            "en": "Work = 3 × 12 = 36 man-days. With 4 workers: 36 / 4 = 9 days.",
+            "hi": "कार्य = 3 × 12 = 36 श्रमिक-दिन। 4 श्रमिकों के साथ: 36 / 4 = 9 दिन।"
+          },
+          "topic": "Time & Work",
+          "subject": "Quant",
+          "difficulty": "medium"
+        }
+      ]
+    },
+    {
+      "sectionId": "english",
+      "sectionName": "English Language & Comprehension",
+      "questions": [
+        {
+          "en": "Choose the correct synonym of 'BENEVOLENT'.",
+          "hi": "'BENEVOLENT' का सही पर्यायवाची चुनिए।",
+          "options": {
+            "A": { "en": "Cruel", "hi": "क्रूर" },
+            "B": { "en": "Kind", "hi": "दयालु" },
+            "C": { "en": "Greedy", "hi": "लालची" },
+            "D": { "en": "Rude", "hi": "अशिष्ट" }
+          },
+          "correct": "B",
+          "explanation": {
+            "en": "'Benevolent' means kind and well-meaning.",
+            "hi": "'Benevolent' का अर्थ दयालु और परोपकारी होता है।"
+          },
+          "topic": "Synonyms",
+          "subject": "English",
+          "difficulty": "easy"
+        },
+        {
+          "en": "Identify the error: 'She don't like coffee in the morning.'",
+          "hi": "त्रुटि पहचानिए: 'She don't like coffee in the morning.'",
+          "options": {
+            "A": { "en": "She", "hi": "She" },
+            "B": { "en": "don't", "hi": "don't" },
+            "C": { "en": "like coffee", "hi": "like coffee" },
+            "D": { "en": "in the morning", "hi": "in the morning" }
+          },
+          "correct": "B",
+          "explanation": {
+            "en": "Third person singular needs 'doesn't', so it should be 'She doesn't like coffee'.",
+            "hi": "तृतीय पुरुष एकवचन के लिए 'doesn't' चाहिए, इसलिए 'She doesn't like coffee' होना चाहिए।"
+          },
+          "topic": "Error Detection",
+          "subject": "English",
+          "difficulty": "easy"
+        }
+      ]
+    }
+  ]
+}

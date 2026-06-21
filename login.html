@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#2563eb" />
+  <title>Login / Register — ExamZen</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div id="ez-header"></div>
+
+  <main class="page">
+    <div class="container" style="max-width:440px">
+      <div class="card mt-16">
+        <div class="tabs">
+          <button id="tab-login" class="active" onclick="showTab('login')">Login</button>
+          <button id="tab-register" onclick="showTab('register')">Register</button>
+        </div>
+
+        <!-- LOGIN -->
+        <form id="form-login" onsubmit="return doLogin(event)">
+          <div class="field">
+            <label>Username or Email</label>
+            <input class="input" id="login-id" autocomplete="username" required />
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input class="input" id="login-pass" type="password" autocomplete="current-password" required />
+          </div>
+          <button class="btn btn-primary btn-block" type="submit">Login</button>
+        </form>
+
+        <!-- REGISTER -->
+        <form id="form-register" class="hidden" onsubmit="return doRegister(event)">
+          <div class="field">
+            <label>Full Name</label>
+            <input class="input" id="reg-name" required />
+          </div>
+          <div class="field">
+            <label>Username <span class="muted">(letters & numbers only)</span></label>
+            <input class="input" id="reg-user" pattern="[A-Za-z0-9]+" required />
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input class="input" id="reg-email" type="email" required />
+          </div>
+          <div class="field">
+            <label>Password <span class="muted">(min 6 chars)</span></label>
+            <input class="input" id="reg-pass" type="password" minlength="6" required />
+          </div>
+          <button class="btn btn-primary btn-block" type="submit">Create Account</button>
+        </form>
+
+        <p class="muted center mt-16" style="font-size:.8rem">
+          Demo mode: accounts are stored in your browser. Add Firebase config to go live.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <div id="ez-bottomnav"></div>
+
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/utils.js"></script>
+  <script>
+    EZ.mountChrome("");
+    // Already logged in? go to profile / next.
+    if (EZAuth.currentUser()) location.href = nextUrl();
+
+    function nextUrl() { return EZ.qs("next") || "/profile.html"; }
+
+    function showTab(which) {
+      const login = which === "login";
+      document.getElementById("tab-login").classList.toggle("active", login);
+      document.getElementById("tab-register").classList.toggle("active", !login);
+      document.getElementById("form-login").classList.toggle("hidden", !login);
+      document.getElementById("form-register").classList.toggle("hidden", login);
+    }
+
+    function doLogin(e) {
+      e.preventDefault();
+      const r = EZAuth.login({
+        identifier: document.getElementById("login-id").value,
+        password: document.getElementById("login-pass").value,
+      });
+      if (!r.ok) { EZ.toast(r.error); return false; }
+      EZ.toast("Welcome back, " + r.user.name.split(" ")[0] + "!");
+      setTimeout(() => (location.href = nextUrl()), 600);
+      return false;
+    }
+
+    function doRegister(e) {
+      e.preventDefault();
+      const r = EZAuth.register({
+        name: document.getElementById("reg-name").value.trim(),
+        username: document.getElementById("reg-user").value.trim(),
+        email: document.getElementById("reg-email").value.trim(),
+        password: document.getElementById("reg-pass").value,
+      });
+      if (!r.ok) { EZ.toast(r.error); return false; }
+      EZ.toast("Account created! 🎉");
+      setTimeout(() => (location.href = nextUrl()), 600);
+      return false;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#2563eb" />
+  <title>Live Tests — ExamZen</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div id="ez-header"></div>
+
+  <main class="page">
+    <div class="container">
+      <h1 class="section-title">Live Tests</h1>
+      <div class="tabs">
+        <button class="active" onclick="switchTab('live')" id="t-live">🔴 Live Now</button>
+        <button onclick="switchTab('previous')" id="t-previous">📂 Previous Live</button>
+      </div>
+      <div id="live-list"></div>
+    </div>
+  </main>
+
+  <div id="ez-bottomnav"></div>
+
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/utils.js"></script>
+  <script>
+    EZ.mountChrome("live");
+    // Demo live test schedule. In production this comes from a real-time
+    // Firestore "liveTests" collection via onSnapshot.
+    const now = Date.now();
+    const liveTests = [
+      { testId: "cgl-full-mock-01", name: "Daily CGL Live Mock", examType: "CGL",
+        scheduledAt: now - 5*60000, endAt: now + 55*60000, attempts: 1284 },
+      { testId: "railway-ntpc-mock-01", name: "NTPC Weekend Live", examType: "NTPC",
+        scheduledAt: now - 3*86400000, endAt: now - 3*86400000 + 3600000, attempts: 3920 },
+      { testId: "chsl-full-mock-01", name: "CHSL Speed Live", examType: "CHSL",
+        scheduledAt: now - 7*86400000, endAt: now - 7*86400000 + 3600000, attempts: 2150 },
+    ];
+    let tab = "live";
+
+    function switchTab(t) {
+      tab = t;
+      document.getElementById("t-live").classList.toggle("active", t==="live");
+      document.getElementById("t-previous").classList.toggle("active", t==="previous");
+      render();
+    }
+
+    function render() {
+      const n = Date.now();
+      const list = liveTests.filter(t => tab==="live" ? (t.scheduledAt<=n && t.endAt>=n) : (t.endAt<n));
+      const host = document.getElementById("live-list");
+      if (!list.length) {
+        host.innerHTML = `<div class="empty-state"><div class="big">${tab==="live"?'🔴':'📂'}</div>No ${tab==="live"?'live tests right now':'previous live tests'}.</div>`;
+        return;
+      }
+      host.innerHTML = list.map(t => `
+        <div class="test-row">
+          <div>
+            <h4>${t.name} ${tab==="live"?'<span class="badge badge-live">Live</span>':'<span class="badge badge-free">Free</span>'}</h4>
+            <div class="meta">${t.examType} • 👥 ${t.attempts.toLocaleString()} participants${tab==="live"?` • ends in ${Math.round((t.endAt-n)/60000)} min`:''}</div>
+          </div>
+          <button class="btn btn-sm btn-primary" onclick="attempt('${t.testId}')">${tab==="live"?'Join':'Reattempt'}</button>
+        </div>`).join("");
+    }
+
+    function attempt(testId) {
+      if (!EZAuth.currentUser()) { location.href = "/login.html?next=" + encodeURIComponent("/test/index.html?testId="+testId); return; }
+      location.href = "/test/index.html?testId=" + testId;
+    }
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#2563eb" />
+  <title>My Profile — ExamZen</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div id="ez-header"></div>
+
+  <main class="page">
+    <div class="container" style="max-width:720px">
+      <div class="card mt-16" id="profile-card"></div>
+
+      <h2 class="section-title">Recent Test Results</h2>
+      <div id="results-list"></div>
+    </div>
+  </main>
+
+  <div id="ez-bottomnav"></div>
+
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/utils.js"></script>
+  <script>
+    EZ.mountChrome("profile");
+    if (!EZAuth.requireLogin()) {/* redirected */}
+
+    const u = EZAuth.currentUser();
+    if (u) {
+      const premium = EZAuth.isPremium();
+      const initials = (u.name || "U").split(" ").map(s=>s[0]).join("").slice(0,2).toUpperCase();
+      const expiry = u.planExpiry ? new Date(u.planExpiry).toLocaleDateString() : "—";
+      document.getElementById("profile-card").innerHTML = `
+        <div class="row between wrap">
+          <div class="row">
+            <div class="logo" style="width:54px;height:54px;font-size:1.3rem">${initials}</div>
+            <div>
+              <h3>${u.name}</h3>
+              <div class="muted">@${u.username} • ${u.email}</div>
+            </div>
+          </div>
+          <span class="badge ${premium ? 'badge-premium' : 'badge-free'}">${premium ? 'Premium' : 'Free'}</span>
+        </div>
+        <div class="grid grid-2 mt-16">
+          <div class="card"><div class="muted">Plan</div><b>${premium ? 'Premium' : 'Free'}</b></div>
+          <div class="card"><div class="muted">Valid till</div><b>${premium ? expiry : '—'}</b></div>
+        </div>
+        <div class="row wrap mt-16">
+          ${premium ? '' : '<a class="btn btn-primary" href="/pricing.html">Upgrade to Premium</a>'}
+          <a class="btn btn-outline" href="/saved.html">Saved Questions</a>
+          <button class="btn btn-danger" onclick="logout()">Logout</button>
+        </div>`;
+
+      // Results
+      const results = (EZ.get("ez_results", [])).filter(r => r.userId === u.uid)
+        .sort((a,b)=> new Date(b.submittedAt) - new Date(a.submittedAt));
+      const host = document.getElementById("results-list");
+      if (!results.length) {
+        host.innerHTML = `<div class="empty-state"><div class="big">📊</div>No tests attempted yet.<br><a href="/exams/index.html">Take your first mock →</a></div>`;
+      } else {
+        host.innerHTML = results.map(r => `
+          <a class="test-row" href="/result/index.html?id=${r.id}">
+            <div>
+              <h4>${r.testName}</h4>
+              <div class="meta">Score ${r.score}/${r.maxScore} • Rank ${r.allIndiaRank}/${r.totalAttempts} • ${new Date(r.submittedAt).toLocaleDateString()}</div>
+            </div>
+            <span class="btn btn-sm btn-outline">View</span>
+          </a>`).join("");
+      }
+    }
+
+    function logout() {
+      EZAuth.logout();
+      EZ.toast("Logged out");
+      setTimeout(()=> location.href="/index.html", 500);
+    }
+  </script>
+</body>
+</html>

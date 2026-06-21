@@ -1,0 +1,98 @@
+{
+  "testId": "chsl-full-mock-01",
+  "testName": "SSC CHSL Tier-I Full Mock 1",
+  "examType": "CHSL",
+  "tier": "1",
+  "duration": 360,
+  "totalQuestions": 4,
+  "totalMarks": 8,
+  "marksPerQuestion": 2,
+  "negativeMarking": 0.5,
+  "isPremium": false,
+  "sections": [
+    {
+      "sectionId": "reasoning",
+      "sectionName": "General Intelligence",
+      "questions": [
+        {
+          "en": "Which one is different: Square, Circle, Triangle, Cube?",
+          "hi": "कौन-सा भिन्न है: वर्ग, वृत्त, त्रिभुज, घन?",
+          "options": {
+            "A": { "en": "Square", "hi": "वर्ग" },
+            "B": { "en": "Circle", "hi": "वृत्त" },
+            "C": { "en": "Triangle", "hi": "त्रिभुज" },
+            "D": { "en": "Cube", "hi": "घन" }
+          },
+          "correct": "D",
+          "explanation": { "en": "Cube is 3D; the rest are 2D shapes.", "hi": "घन त्रिविमीय है; बाकी द्विविमीय आकृतियाँ हैं।" },
+          "topic": "Classification",
+          "subject": "Reasoning",
+          "difficulty": "easy"
+        }
+      ]
+    },
+    {
+      "sectionId": "ga",
+      "sectionName": "General Awareness",
+      "questions": [
+        {
+          "en": "The currency of Japan is?",
+          "hi": "जापान की मुद्रा क्या है?",
+          "options": {
+            "A": { "en": "Yuan", "hi": "युआन" },
+            "B": { "en": "Won", "hi": "वोन" },
+            "C": { "en": "Yen", "hi": "येन" },
+            "D": { "en": "Ringgit", "hi": "रिंगित" }
+          },
+          "correct": "C",
+          "explanation": { "en": "The Japanese Yen is the official currency of Japan.", "hi": "जापानी येन जापान की आधिकारिक मुद्रा है।" },
+          "topic": "Static GK",
+          "subject": "GA",
+          "difficulty": "easy"
+        }
+      ]
+    },
+    {
+      "sectionId": "quant",
+      "sectionName": "Quantitative Aptitude",
+      "questions": [
+        {
+          "en": "What is the value of 12 × 8 − 6 × 4?",
+          "hi": "12 × 8 − 6 × 4 का मान क्या है?",
+          "options": {
+            "A": { "en": "72", "hi": "72" },
+            "B": { "en": "60", "hi": "60" },
+            "C": { "en": "48", "hi": "48" },
+            "D": { "en": "84", "hi": "84" }
+          },
+          "correct": "A",
+          "explanation": { "en": "96 − 24 = 72.", "hi": "96 − 24 = 72।" },
+          "topic": "Simplification",
+          "subject": "Quant",
+          "difficulty": "easy"
+        }
+      ]
+    },
+    {
+      "sectionId": "english",
+      "sectionName": "English Language",
+      "questions": [
+        {
+          "en": "Choose the correctly spelt word.",
+          "hi": "सही वर्तनी वाला शब्द चुनिए।",
+          "options": {
+            "A": { "en": "Recieve", "hi": "Recieve" },
+            "B": { "en": "Receive", "hi": "Receive" },
+            "C": { "en": "Receeve", "hi": "Receeve" },
+            "D": { "en": "Receve", "hi": "Receve" }
+          },
+          "correct": "B",
+          "explanation": { "en": "The rule 'i before e except after c' applies: 'receive'.", "hi": "'c के बाद e से पहले i' नियम के अनुसार सही वर्तनी 'receive' है।" },
+          "topic": "Spelling",
+          "subject": "English",
+          "difficulty": "easy"
+        }
+      ]
+    }
+  ]
+}

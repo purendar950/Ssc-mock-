@@ -1,0 +1,85 @@
+{
+  "testId": "cgl-pyq-2023",
+  "testName": "SSC CGL 2023 PYQ Set",
+  "examType": "CGL",
+  "duration": 360,
+  "totalQuestions": 4,
+  "totalMarks": 8,
+  "marksPerQuestion": 2,
+  "negativeMarking": 0.5,
+  "isPremium": true,
+  "sections": [
+    {
+      "sectionId": "ga",
+      "sectionName": "General Awareness (PYQ)",
+      "questions": [
+        {
+          "en": "Which Article of the Indian Constitution deals with the Right to Equality?",
+          "hi": "भारतीय संविधान का कौन-सा अनुच्छेद समानता के अधिकार से संबंधित है?",
+          "options": {
+            "A": { "en": "Article 14", "hi": "अनुच्छेद 14" },
+            "B": { "en": "Article 19", "hi": "अनुच्छेद 19" },
+            "C": { "en": "Article 21", "hi": "अनुच्छेद 21" },
+            "D": { "en": "Article 32", "hi": "अनुच्छेद 32" }
+          },
+          "correct": "A",
+          "explanation": { "en": "Article 14 guarantees equality before the law.", "hi": "अनुच्छेद 14 कानून के समक्ष समानता की गारंटी देता है।" },
+          "topic": "Polity",
+          "subject": "GA",
+          "difficulty": "medium"
+        },
+        {
+          "en": "The Chipko Movement is associated with the conservation of?",
+          "hi": "चिपको आंदोलन किसके संरक्षण से संबंधित है?",
+          "options": {
+            "A": { "en": "Water", "hi": "जल" },
+            "B": { "en": "Forests", "hi": "वन" },
+            "C": { "en": "Wildlife", "hi": "वन्यजीव" },
+            "D": { "en": "Soil", "hi": "मृदा" }
+          },
+          "correct": "B",
+          "explanation": { "en": "The Chipko Movement (1973) aimed at protecting trees and forests.", "hi": "चिपको आंदोलन (1973) पेड़ों और वनों की रक्षा के लिए था।" },
+          "topic": "Environment",
+          "subject": "GA",
+          "difficulty": "easy"
+        }
+      ]
+    },
+    {
+      "sectionId": "quant",
+      "sectionName": "Quantitative Aptitude (PYQ)",
+      "questions": [
+        {
+          "en": "The simple interest on ₹5,000 at 8% per annum for 2 years is?",
+          "hi": "₹5,000 पर 8% वार्षिक दर से 2 वर्ष का साधारण ब्याज कितना है?",
+          "options": {
+            "A": { "en": "₹800", "hi": "₹800" },
+            "B": { "en": "₹400", "hi": "₹400" },
+            "C": { "en": "₹1,000", "hi": "₹1,000" },
+            "D": { "en": "₹640", "hi": "₹640" }
+          },
+          "correct": "A",
+          "explanation": { "en": "SI = P×R×T/100 = 5000×8×2/100 = ₹800.", "hi": "साधारण ब्याज = मूलधन×दर×समय/100 = 5000×8×2/100 = ₹800।" },
+          "topic": "Simple Interest",
+          "subject": "Quant",
+          "difficulty": "easy"
+        },
+        {
+          "en": "If x + 1/x = 4, what is x² + 1/x²?",
+          "hi": "यदि x + 1/x = 4, तो x² + 1/x² कितना है?",
+          "options": {
+            "A": { "en": "14", "hi": "14" },
+            "B": { "en": "16", "hi": "16" },
+            "C": { "en": "12", "hi": "12" },
+            "D": { "en": "18", "hi": "18" }
+          },
+          "correct": "A",
+          "explanation": { "en": "(x+1/x)² = x²+1/x²+2 = 16, so x²+1/x² = 14.", "hi": "(x+1/x)² = x²+1/x²+2 = 16, अतः x²+1/x² = 14।" },
+          "topic": "Algebra",
+          "subject": "Quant",
+          "difficulty": "medium"
+        }
+      ]
+    }
+  ]
+}

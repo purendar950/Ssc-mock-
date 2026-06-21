@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#2563eb" />
+  <title>ExamZen — Free & Premium Mock Tests for SSC, Railway & State Exams</title>
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div id="ez-header"></div>
+
+  <main class="page">
+    <div class="container">
+      <section class="hero">
+        <h1>Crack SSC, Railway & State Exams</h1>
+        <p>20,000+ PYQs • Full-length mocks • Sectional & subject-wise tests • All-India ranking</p>
+        <a class="btn" href="/exams/index.html">Start Practicing →</a>
+      </section>
+
+      <div class="grid grid-3 mt-24">
+        <div class="card center">
+          <div style="font-size:1.8rem;font-weight:800;color:var(--primary)">20,000+</div>
+          <div class="muted">Previous Year Questions</div>
+        </div>
+        <div class="card center">
+          <div style="font-size:1.8rem;font-weight:800;color:var(--primary)">All-India</div>
+          <div class="muted">Live ranking on submit</div>
+        </div>
+        <div class="card center">
+          <div style="font-size:1.8rem;font-weight:800;color:var(--primary)">₹99/yr</div>
+          <div class="muted">One-time, 365 days</div>
+        </div>
+      </div>
+
+      <h2 class="section-title">Popular Exams</h2>
+      <div class="grid grid-2" id="exam-cards"></div>
+
+      <h2 class="section-title">Why ExamZen?</h2>
+      <div class="grid grid-3">
+        <div class="card"><b>🎯 Real exam pattern</b><p class="muted mt-8">Tier-I/II patterns, negative marking, section navigation just like the actual CBT.</p></div>
+        <div class="card"><b>🌐 Bilingual</b><p class="muted mt-8">Every question in English & हिन्दी with detailed explanations.</p></div>
+        <div class="card"><b>📊 Deep analytics</b><p class="muted mt-8">Section-wise breakdown, accuracy, time taken and All-India rank.</p></div>
+      </div>
+
+      <div class="card mt-24 center">
+        <h3>Go Premium</h3>
+        <p class="muted mt-8">Unlock all mocks, all PYQs, unlimited reattempts & advanced analytics.</p>
+        <a class="btn btn-primary mt-16" href="/pricing.html">View Plans</a>
+      </div>
+    </div>
+  </main>
+
+  <div id="ez-bottomnav"></div>
+
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/utils.js"></script>
+  <script>
+    EZ.mountChrome("home");
+    const exams = [
+      { id: "cgl", name: "SSC CGL", sub: "Combined Graduate Level", emoji: "📘", live: true },
+      { id: "chsl", name: "SSC CHSL", sub: "10+2 Level", emoji: "📗", live: true },
+      { id: "railway", name: "Railway NTPC", sub: "Non-Technical Popular", emoji: "🚆", live: true },
+      { id: "mts", name: "SSC MTS", sub: "Multi-Tasking Staff", emoji: "📙", live: false },
+    ];
+    document.getElementById("exam-cards").innerHTML = exams.map(e => `
+      <a class="card" href="${e.live ? `/exams/portal.html?exam=${e.id}` : '#'}" style="display:block;${e.live?'':'opacity:.6'}">
+        <div class="row between">
+          <div class="row"><span style="font-size:1.6rem">${e.emoji}</span>
+            <div><h4 style="color:var(--text)">${e.name}</h4><div class="meta muted">${e.sub}</div></div>
+          </div>
+          <span class="badge ${e.live ? 'badge-free' : 'badge-premium'}">${e.live ? 'Open' : 'Soon'}</span>
+        </div>
+      </a>`).join("");
+  </script>
+</body>
+</html>

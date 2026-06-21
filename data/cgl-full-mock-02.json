@@ -1,0 +1,158 @@
+{
+  "testId": "cgl-full-mock-02",
+  "testName": "SSC CGL Tier-I Full Mock 2",
+  "examType": "CGL",
+  "tier": "1",
+  "duration": 600,
+  "totalQuestions": 8,
+  "totalMarks": 16,
+  "marksPerQuestion": 2,
+  "negativeMarking": 0.5,
+  "isPremium": true,
+  "sections": [
+    {
+      "sectionId": "reasoning",
+      "sectionName": "General Intelligence & Reasoning",
+      "questions": [
+        {
+          "en": "In a certain code, 'CAT' is written as 'DBU'. How is 'DOG' written?",
+          "hi": "किसी कूट भाषा में 'CAT' को 'DBU' लिखा जाता है। 'DOG' कैसे लिखा जाएगा?",
+          "options": {
+            "A": { "en": "EPH", "hi": "EPH" },
+            "B": { "en": "EPF", "hi": "EPF" },
+            "C": { "en": "FPH", "hi": "FPH" },
+            "D": { "en": "EOH", "hi": "EOH" }
+          },
+          "correct": "A",
+          "explanation": { "en": "Each letter is shifted +1: D→E, O→P, G→H.", "hi": "प्रत्येक अक्षर +1 स्थानांतरित होता है: D→E, O→P, G→H।" },
+          "topic": "Coding-Decoding",
+          "subject": "Reasoning",
+          "difficulty": "easy"
+        },
+        {
+          "en": "Which number replaces the question mark: 7, 14, 28, 56, ?",
+          "hi": "प्रश्नवाचक चिह्न के स्थान पर कौन-सी संख्या आएगी: 7, 14, 28, 56, ?",
+          "options": {
+            "A": { "en": "84", "hi": "84" },
+            "B": { "en": "112", "hi": "112" },
+            "C": { "en": "98", "hi": "98" },
+            "D": { "en": "120", "hi": "120" }
+          },
+          "correct": "B",
+          "explanation": { "en": "Each term doubles: 56 × 2 = 112.", "hi": "प्रत्येक पद दुगुना होता है: 56 × 2 = 112।" },
+          "topic": "Number Series",
+          "subject": "Reasoning",
+          "difficulty": "easy"
+        }
+      ]
+    },
+    {
+      "sectionId": "ga",
+      "sectionName": "General Awareness",
+      "questions": [
+        {
+          "en": "Which gas is most abundant in the Earth's atmosphere?",
+          "hi": "पृथ्वी के वायुमंडल में सबसे प्रचुर मात्रा में कौन-सी गैस है?",
+          "options": {
+            "A": { "en": "Oxygen", "hi": "ऑक्सीजन" },
+            "B": { "en": "Carbon dioxide", "hi": "कार्बन डाइऑक्साइड" },
+            "C": { "en": "Nitrogen", "hi": "नाइट्रोजन" },
+            "D": { "en": "Hydrogen", "hi": "हाइड्रोजन" }
+          },
+          "correct": "C",
+          "explanation": { "en": "Nitrogen makes up about 78% of the atmosphere.", "hi": "नाइट्रोजन वायुमंडल का लगभग 78% भाग है।" },
+          "topic": "Science",
+          "subject": "GA",
+          "difficulty": "easy"
+        },
+        {
+          "en": "The 'Quit India Movement' was launched in which year?",
+          "hi": "'भारत छोड़ो आंदोलन' किस वर्ष शुरू हुआ था?",
+          "options": {
+            "A": { "en": "1930", "hi": "1930" },
+            "B": { "en": "1942", "hi": "1942" },
+            "C": { "en": "1947", "hi": "1947" },
+            "D": { "en": "1919", "hi": "1919" }
+          },
+          "correct": "B",
+          "explanation": { "en": "The Quit India Movement was launched on 8 August 1942.", "hi": "भारत छोड़ो आंदोलन 8 अगस्त 1942 को शुरू हुआ था।" },
+          "topic": "History",
+          "subject": "GA",
+          "difficulty": "easy"
+        }
+      ]
+    },
+    {
+      "sectionId": "quant",
+      "sectionName": "Quantitative Aptitude",
+      "questions": [
+        {
+          "en": "What is 35% of 240?",
+          "hi": "240 का 35% कितना है?",
+          "options": {
+            "A": { "en": "72", "hi": "72" },
+            "B": { "en": "84", "hi": "84" },
+            "C": { "en": "96", "hi": "96" },
+            "D": { "en": "80", "hi": "80" }
+          },
+          "correct": "B",
+          "explanation": { "en": "0.35 × 240 = 84.", "hi": "0.35 × 240 = 84।" },
+          "topic": "Percentage",
+          "subject": "Quant",
+          "difficulty": "easy"
+        },
+        {
+          "en": "The average of 5 consecutive integers is 17. What is the largest?",
+          "hi": "5 क्रमागत पूर्णांकों का औसत 17 है। सबसे बड़ा कौन-सा है?",
+          "options": {
+            "A": { "en": "18", "hi": "18" },
+            "B": { "en": "19", "hi": "19" },
+            "C": { "en": "20", "hi": "20" },
+            "D": { "en": "21", "hi": "21" }
+          },
+          "correct": "B",
+          "explanation": { "en": "Middle term = 17, so numbers are 15,16,17,18,19. Largest = 19.", "hi": "मध्य पद = 17, अतः संख्याएँ 15,16,17,18,19 हैं। सबसे बड़ा = 19।" },
+          "topic": "Average",
+          "subject": "Quant",
+          "difficulty": "medium"
+        }
+      ]
+    },
+    {
+      "sectionId": "english",
+      "sectionName": "English Language & Comprehension",
+      "questions": [
+        {
+          "en": "Choose the correct antonym of 'SCARCE'.",
+          "hi": "'SCARCE' का सही विलोम चुनिए।",
+          "options": {
+            "A": { "en": "Rare", "hi": "दुर्लभ" },
+            "B": { "en": "Abundant", "hi": "प्रचुर" },
+            "C": { "en": "Limited", "hi": "सीमित" },
+            "D": { "en": "Few", "hi": "कुछ" }
+          },
+          "correct": "B",
+          "explanation": { "en": "'Scarce' means insufficient; its antonym is 'abundant'.", "hi": "'Scarce' का अर्थ अपर्याप्त है; इसका विलोम 'abundant' है।" },
+          "topic": "Antonyms",
+          "subject": "English",
+          "difficulty": "easy"
+        },
+        {
+          "en": "Fill in the blank: 'He has been working here ___ 2015.'",
+          "hi": "रिक्त स्थान भरें: 'He has been working here ___ 2015.'",
+          "options": {
+            "A": { "en": "for", "hi": "for" },
+            "B": { "en": "since", "hi": "since" },
+            "C": { "en": "from", "hi": "from" },
+            "D": { "en": "during", "hi": "during" }
+          },
+          "correct": "B",
+          "explanation": { "en": "'Since' is used with a point of time (2015).", "hi": "'Since' का प्रयोग किसी समय-बिंदु (2015) के साथ होता है।" },
+          "topic": "Fill in the Blanks",
+          "subject": "English",
+          "difficulty": "easy"
+        }
+      ]
+    }
+  ]
+}

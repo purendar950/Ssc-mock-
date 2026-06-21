@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#2563eb" />
+  <title>Saved Questions — ExamZen</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    .qcard { border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; margin-bottom:12px; background:var(--card-bg); }
+    .qcard .opt { padding:7px 10px; border-radius:6px; margin:4px 0; border:1px solid var(--border); font-size:.92rem; }
+    .qcard .opt.correct { background:var(--success-soft); border-color:var(--success); }
+    .qcard .expl { margin-top:8px; font-size:.86rem; color:var(--text-muted); background:var(--bg); padding:10px; border-radius:6px; }
+    .qcard .tag { font-size:.72rem; color:var(--text-muted); }
+    .toolbar { display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-bottom:16px; }
+    .seg { display:flex; gap:4px; }
+    .seg button { border:1px solid var(--border); background:var(--card-bg); color:var(--text-muted); padding:6px 12px; border-radius:6px; font-weight:600; font-size:.82rem; cursor:pointer; }
+    .seg button.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+    .focus-nav { display:flex; justify-content:space-between; align-items:center; margin-top:14px; }
+  </style>
+</head>
+<body>
+  <div id="ez-header"></div>
+
+  <main class="page">
+    <div class="container" style="max-width:760px">
+      <h1 class="section-title">Saved Questions</h1>
+      <div class="toolbar" id="toolbar" style="display:none">
+        <div class="seg" id="lang-seg">
+          <button data-lang="en" class="active" onclick="setLang('en')">English</button>
+          <button data-lang="hi" onclick="setLang('hi')">हिन्दी</button>
+          <button data-lang="both" onclick="setLang('both')">Bilingual</button>
+        </div>
+        <div class="seg" id="view-seg">
+          <button data-view="list" class="active" onclick="setView('list')">List</button>
+          <button data-view="focus" onclick="setView('focus')">Focus</button>
+        </div>
+      </div>
+      <div id="saved-root"></div>
+    </div>
+  </main>
+
+  <div id="ez-bottomnav"></div>
+
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/utils.js"></script>
+  <script>
+    EZ.mountChrome("saved");
+    if (!EZAuth.requireLogin()) {/* redirected */}
+
+    const u = EZAuth.currentUser();
+    const STORE = u ? "ez_saved_" + u.uid : null;
+    let lib = u ? EZ.get(STORE, []) : [];
+    let lang = "en", view = "list", focusIdx = 0;
+
+    function setLang(l){ lang=l; document.querySelectorAll("#lang-seg button").forEach(b=>b.classList.toggle("active",b.dataset.lang===l)); render(); }
+    function setView(v){ view=v; focusIdx=0; document.querySelectorAll("#view-seg button").forEach(b=>b.classList.toggle("active",b.dataset.view===v)); render(); }
+
+    function qcard(q, idx) {
+      const showEn = lang==="en"||lang==="both";
+      const showHi = lang==="hi"||lang==="both";
+      const opts = ["A","B","C","D"].map(o => {
+        const cls = o===q.correct ? "correct" : "";
+        const txt = showEn ? q.options[o].en : "";
+        const txtHi = showHi ? `<span class="tag" style="display:block">${q.options[o].hi}</span>` : "";
+        return `<div class="opt ${cls}"><b>${o}.</b> ${txt} ${txtHi}</div>`;
+      }).join("");
+      return `
+        <div class="qcard">
+          <div class="row between">
+            <span class="tag">${q.subject||""} • ${q.topic||""}</span>
+            <button class="btn btn-sm btn-outline" onclick="removeQ('${q.questionId}')">🗑 Remove</button>
+          </div>
+          ${showEn ? `<div style="font-weight:600;margin:6px 0">${q.en}</div>` : ""}
+          ${showHi ? `<div class="tag" style="margin-bottom:6px">${q.hi||""}</div>` : ""}
+          ${opts}
+          ${q.explanation ? `<div class="expl"><b>Explanation:</b> ${ (lang==="hi"&&q.explanation.hi) ? q.explanation.hi : (q.explanation.en||"") }</div>` : ""}
+        </div>`;
+    }
+
+    function render() {
+      const root = document.getElementById("saved-root");
+      const toolbar = document.getElementById("toolbar");
+      if (!lib.length) {
+        toolbar.style.display = "none";
+        root.innerHTML = `<div class="empty-state"><div class="big">📚</div>Your library is empty.<br>Save questions from any test's solutions page.</div>`;
+        return;
+      }
+      toolbar.style.display = "flex";
+      if (view === "list") {
+        root.innerHTML = lib.map((q,i)=>qcard(q,i)).join("");
+      } else {
+        focusIdx = Math.max(0, Math.min(focusIdx, lib.length-1));
+        root.innerHTML = qcard(lib[focusIdx], focusIdx) + `
+          <div class="focus-nav">
+            <button class="btn btn-outline" onclick="focusMove(-1)" ${focusIdx===0?'disabled':''}>← Previous</button>
+            <span class="muted">${focusIdx+1} / ${lib.length}</span>
+            <button class="btn btn-outline" onclick="focusMove(1)" ${focusIdx===lib.length-1?'disabled':''}>Next →</button>
+          </div>`;
+      }
+    }
+    function focusMove(d){ focusIdx += d; render(); }
+    function removeQ(qid){
+      lib = lib.filter(q => q.questionId !== qid);
+      EZ.set(STORE, lib);
+      if (focusIdx >= lib.length) focusIdx = Math.max(0, lib.length-1);
+      EZ.toast("Removed");
+      render();
+    }
+    render();
+  </script>
+</body>
+</html>

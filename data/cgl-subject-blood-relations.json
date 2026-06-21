@@ -1,0 +1,64 @@
+{
+  "testId": "cgl-subject-blood-relations",
+  "testName": "Reasoning: Blood Relations",
+  "examType": "CGL",
+  "duration": 300,
+  "totalQuestions": 3,
+  "totalMarks": 6,
+  "marksPerQuestion": 2,
+  "negativeMarking": 0,
+  "isPremium": false,
+  "sections": [
+    {
+      "sectionId": "reasoning",
+      "sectionName": "Blood Relations",
+      "questions": [
+        {
+          "en": "A is B's father. C is B's sister. How is A related to C?",
+          "hi": "A, B का पिता है। C, B की बहन है। A, C से कैसे संबंधित है?",
+          "options": {
+            "A": { "en": "Father", "hi": "पिता" },
+            "B": { "en": "Brother", "hi": "भाई" },
+            "C": { "en": "Uncle", "hi": "चाचा" },
+            "D": { "en": "Grandfather", "hi": "दादा" }
+          },
+          "correct": "A",
+          "explanation": { "en": "B and C are siblings; A is their father.", "hi": "B और C भाई-बहन हैं; A उनका पिता है।" },
+          "topic": "Blood Relations",
+          "subject": "Reasoning",
+          "difficulty": "easy"
+        },
+        {
+          "en": "P is the mother of Q. Q is the son of R. How is R related to P?",
+          "hi": "P, Q की माता है। Q, R का बेटा है। R, P से कैसे संबंधित है?",
+          "options": {
+            "A": { "en": "Husband", "hi": "पति" },
+            "B": { "en": "Brother", "hi": "भाई" },
+            "C": { "en": "Son", "hi": "बेटा" },
+            "D": { "en": "Father", "hi": "पिता" }
+          },
+          "correct": "A",
+          "explanation": { "en": "Q's mother is P and Q's parent R must be P's husband.", "hi": "Q की माता P है और Q का अभिभावक R, P का पति होगा।" },
+          "topic": "Blood Relations",
+          "subject": "Reasoning",
+          "difficulty": "medium"
+        },
+        {
+          "en": "X said, 'Y's mother is the only daughter of my mother.' How is X related to Y?",
+          "hi": "X ने कहा, 'Y की माता मेरी माता की इकलौती बेटी है।' X, Y से कैसे संबंधित है?",
+          "options": {
+            "A": { "en": "Brother", "hi": "भाई" },
+            "B": { "en": "Father", "hi": "पिता" },
+            "C": { "en": "Maternal uncle", "hi": "मामा" },
+            "D": { "en": "Grandfather", "hi": "नाना" }
+          },
+          "correct": "C",
+          "explanation": { "en": "The only daughter of X's mother is X's sister, who is Y's mother — so X is Y's maternal uncle.", "hi": "X की माता की इकलौती बेटी X की बहन है, जो Y की माता है — अतः X, Y का मामा है।" },
+          "topic": "Blood Relations",
+          "subject": "Reasoning",
+          "difficulty": "hard"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#2563eb" />
+  <title>Mock Tests — ExamZen</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div id="ez-header"></div>
+
+  <main class="page">
+    <div class="container">
+      <h1 class="section-title" id="exam-title">Loading…</h1>
+      <div class="tabs" id="tabs"></div>
+      <div id="test-list"></div>
+    </div>
+  </main>
+
+  <div id="ez-bottomnav"></div>
+
+  <!-- Upgrade modal -->
+  <div class="modal-backdrop" id="upgrade-modal">
+    <div class="modal">
+      <h3>🔒 Premium test</h3>
+      <p class="muted">This test is part of Premium. Upgrade once (₹99/yr) to unlock all mocks, PYQs and unlimited reattempts.</p>
+      <div class="modal-actions">
+        <button class="btn btn-outline btn-block" onclick="closeUpgrade()">Maybe later</button>
+        <a class="btn btn-primary btn-block" href="/pricing.html">View Plans</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/utils.js"></script>
+  <script>
+    EZ.mountChrome("exams");
+    const examId = EZ.qs("exam") || "cgl";
+    const TAB_LABELS = { full: "Full Mocks", sectional: "Sectionals", subject: "Subject Wise", pyq: "PYQ Tests" };
+    let exam = null, activeTab = null;
+
+    fetch("/data/catalog.json").then(r=>r.json()).then(cat => {
+      exam = cat[examId];
+      if (!exam) { document.getElementById("exam-title").textContent = "Exam not found"; return; }
+      document.getElementById("exam-title").textContent = exam.name + " Mock Tests";
+      const tabKeys = Object.keys(exam.tabs).filter(k => (exam.tabs[k]||[]).length);
+      activeTab = tabKeys[0];
+      document.getElementById("tabs").innerHTML = tabKeys.map(k =>
+        `<button class="${k===activeTab?'active':''}" data-tab="${k}" onclick="switchTab('${k}')">${TAB_LABELS[k]||k}</button>`).join("");
+      renderList();
+    }).catch(()=> {
+      document.getElementById("test-list").innerHTML = '<div class="empty-state">Could not load tests. Serve over HTTP (not file://).</div>';
+    });
+
+    function switchTab(k) {
+      activeTab = k;
+      document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("active", b.dataset.tab===k));
+      renderList();
+    }
+
+    function renderList() {
+      const tests = exam.tabs[activeTab] || [];
+      const premiumUser = EZAuth.isPremium();
+      if (!tests.length) { document.getElementById("test-list").innerHTML = '<div class="empty-state">No tests here yet.</div>'; return; }
+      document.getElementById("test-list").innerHTML = tests.map(t => {
+        const locked = t.premium && !premiumUser;
+        return `
+          <div class="test-row">
+            <div>
+              <h4>${t.name} ${t.premium ? '<span class="badge badge-premium">Premium</span>' : '<span class="badge badge-free">Free</span>'}</h4>
+              <div class="meta">${t.questions} Qs • ${t.marks} marks • ${t.durationMin} min</div>
+            </div>
+            <button class="btn btn-sm ${locked?'btn-outline':'btn-primary'}" onclick="startTest('${t.testId}', ${t.premium})">
+              ${locked ? '🔒 Unlock' : 'Start'}
+            </button>
+          </div>`;
+      }).join("");
+    }
+
+    function startTest(testId, premium) {
+      if (!EZAuth.currentUser()) {
+        location.href = "/login.html?next=" + encodeURIComponent("/test/index.html?testId=" + testId);
+        return;
+      }
+      if (premium && !EZAuth.isPremium()) { openUpgrade(); return; }
+      location.href = "/test/index.html?testId=" + testId;
+    }
+
+    function openUpgrade(){ document.getElementById("upgrade-modal").classList.add("show"); }
+    function closeUpgrade(){ document.getElementById("upgrade-modal").classList.remove("show"); }
+  </script>
+</body>
+</html>

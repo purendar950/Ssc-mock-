@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#2563eb" />
+  <title>Buy Premium — ExamZen</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div id="ez-header"></div>
+
+  <main class="page">
+    <div class="container" style="max-width:520px">
+      <h1 class="section-title">Get Premium</h1>
+
+      <div class="card">
+        <div class="field">
+          <label>Coupon code (optional)</label>
+          <div class="row">
+            <input class="input" id="coupon" placeholder="e.g. PARTNER20" />
+            <button class="btn btn-outline" onclick="applyCoupon()">Apply</button>
+          </div>
+          <div class="meta muted" id="coupon-msg"></div>
+        </div>
+
+        <div class="card center" style="background:var(--bg)">
+          <div class="muted">Amount payable</div>
+          <div style="font-size:2rem;font-weight:800;color:var(--primary)" id="amount">₹124</div>
+          <div class="center mt-16">
+            <div id="qr" style="width:180px;height:180px;margin:0 auto;border:1px dashed var(--border);border-radius:12px;display:grid;place-items:center;color:var(--text-muted)">QR Code</div>
+            <div class="meta mt-8">UPI ID: <b>examzen@upi</b></div>
+          </div>
+        </div>
+
+        <h3 class="mt-24">Submit payment details</h3>
+        <form onsubmit="return submitPayment(event)">
+          <div class="field"><label>Phone</label><input class="input" id="phone" required /></div>
+          <div class="field"><label>12-digit UTR / Reference No.</label><input class="input" id="utr" pattern="[0-9]{10,14}" required /></div>
+          <button class="btn btn-primary btn-block" type="submit">Submit for Verification</button>
+        </form>
+        <p class="muted mt-16" style="font-size:.82rem">After submission, your request is verified within 1–6 hours. (Demo mode upgrades you instantly.)</p>
+      </div>
+    </div>
+  </main>
+
+  <div id="ez-bottomnav"></div>
+
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/utils.js"></script>
+  <script>
+    EZ.mountChrome("");
+    if (!EZAuth.requireLogin()) {/* redirected */}
+
+    // Pre-fill coupon from ?ref= referral links
+    const ref = EZ.qs("ref");
+    let amount = 124, coupon = "NONE";
+    const COUPONS = { "PARTNER20": 99, "WELCOME": 99 };
+
+    if (ref) { document.getElementById("coupon").value = ref; applyCoupon(); }
+
+    function applyCoupon() {
+      const code = (document.getElementById("coupon").value || "").trim().toUpperCase();
+      const msg = document.getElementById("coupon-msg");
+      if (!code) { amount = 124; coupon = "NONE"; render(); msg.textContent=""; return; }
+      if (COUPONS[code]) {
+        amount = COUPONS[code]; coupon = code;
+        msg.style.color = "var(--success)";
+        msg.textContent = `Coupon applied! You save ₹${124 - amount}.`;
+      } else {
+        amount = 124; coupon = "NONE";
+        msg.style.color = "var(--danger)";
+        msg.textContent = "Invalid coupon code.";
+      }
+      render();
+    }
+    function render() {
+      document.getElementById("amount").textContent = "₹" + amount;
+      document.getElementById("qr").textContent = "QR ₹" + amount;
+    }
+
+    function submitPayment(e) {
+      e.preventDefault();
+      const u = EZAuth.currentUser();
+      const reqs = EZ.get("ez_payment_requests", []);
+      reqs.push({
+        id: "pay_" + Date.now(),
+        userId: u.uid, username: u.username, email: u.email,
+        phone: document.getElementById("phone").value,
+        utr: document.getElementById("utr").value,
+        amount, couponUsed: coupon, status: "pending",
+        submittedAt: new Date().toISOString(),
+      });
+      EZ.set("ez_payment_requests", reqs);
+      // Demo: auto-approve so the flow is usable end-to-end.
+      EZAuth.grantPremium(365);
+      EZ.toast("Payment submitted — Premium activated! 🎉");
+      setTimeout(()=> location.href = "/profile.html", 1000);
+      return false;
+    }
+  </script>
+</body>
+</html>

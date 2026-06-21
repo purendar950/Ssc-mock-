@@ -1,0 +1,79 @@
+{
+  "testId": "cgl-sectional-reasoning-01",
+  "testName": "CGL Reasoning Sectional — Set 1",
+  "examType": "CGL",
+  "duration": 360,
+  "totalQuestions": 4,
+  "totalMarks": 8,
+  "marksPerQuestion": 2,
+  "negativeMarking": 0.5,
+  "isPremium": false,
+  "sections": [
+    {
+      "sectionId": "reasoning",
+      "sectionName": "General Intelligence & Reasoning",
+      "questions": [
+        {
+          "en": "Choose the odd one out: 3, 5, 11, 14, 17, 23.",
+          "hi": "विषम चुनिए: 3, 5, 11, 14, 17, 23।",
+          "options": {
+            "A": { "en": "11", "hi": "11" },
+            "B": { "en": "14", "hi": "14" },
+            "C": { "en": "17", "hi": "17" },
+            "D": { "en": "23", "hi": "23" }
+          },
+          "correct": "B",
+          "explanation": { "en": "All are prime except 14.", "hi": "14 को छोड़कर सभी अभाज्य संख्याएँ हैं।" },
+          "topic": "Classification",
+          "subject": "Reasoning",
+          "difficulty": "easy"
+        },
+        {
+          "en": "If 'EARTH' is coded as 'FBSUI', then 'MARS' is coded as?",
+          "hi": "यदि 'EARTH' को 'FBSUI' लिखा जाए, तो 'MARS' को कैसे लिखेंगे?",
+          "options": {
+            "A": { "en": "NBST", "hi": "NBST" },
+            "B": { "en": "NBST", "hi": "NBST" },
+            "C": { "en": "LBST", "hi": "LBST" },
+            "D": { "en": "NCST", "hi": "NCST" }
+          },
+          "correct": "A",
+          "explanation": { "en": "Each letter +1: M→N, A→B, R→S, S→T.", "hi": "प्रत्येक अक्षर +1: M→N, A→B, R→S, S→T।" },
+          "topic": "Coding-Decoding",
+          "subject": "Reasoning",
+          "difficulty": "easy"
+        },
+        {
+          "en": "Pointing to a man, Reena said, 'He is the son of my grandfather's only son.' How is the man related to Reena?",
+          "hi": "एक आदमी की ओर इशारा करते हुए रीना ने कहा, 'वह मेरे दादा के इकलौते बेटे का बेटा है।' वह आदमी रीना से कैसे संबंधित है?",
+          "options": {
+            "A": { "en": "Brother", "hi": "भाई" },
+            "B": { "en": "Father", "hi": "पिता" },
+            "C": { "en": "Uncle", "hi": "चाचा" },
+            "D": { "en": "Cousin", "hi": "चचेरा भाई" }
+          },
+          "correct": "A",
+          "explanation": { "en": "Grandfather's only son is Reena's father; his son is Reena's brother.", "hi": "दादा का इकलौता बेटा रीना का पिता है; उसका बेटा रीना का भाई है।" },
+          "topic": "Blood Relations",
+          "subject": "Reasoning",
+          "difficulty": "medium"
+        },
+        {
+          "en": "Complete the series: AZ, BY, CX, ?",
+          "hi": "श्रृंखला पूरी करें: AZ, BY, CX, ?",
+          "options": {
+            "A": { "en": "DW", "hi": "DW" },
+            "B": { "en": "DV", "hi": "DV" },
+            "C": { "en": "EW", "hi": "EW" },
+            "D": { "en": "DX", "hi": "DX" }
+          },
+          "correct": "A",
+          "explanation": { "en": "First letter +1 (A,B,C,D), second letter -1 (Z,Y,X,W).", "hi": "पहला अक्षर +1 (A,B,C,D), दूसरा अक्षर -1 (Z,Y,X,W)।" },
+          "topic": "Alphabet Series",
+          "subject": "Reasoning",
+          "difficulty": "easy"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "testId": "railway-ntpc-mock-01",
+  "testName": "Railway NTPC CBT-1 Full Mock 1",
+  "examType": "NTPC",
+  "duration": 360,
+  "totalQuestions": 4,
+  "totalMarks": 4,
+  "marksPerQuestion": 1,
+  "negativeMarking": 0.33,
+  "isPremium": false,
+  "sections": [
+    {
+      "sectionId": "math",
+      "sectionName": "Mathematics",
+      "questions": [
+        {
+          "en": "The LCM of 6 and 8 is?",
+          "hi": "6 और 8 का लघुत्तम समापवर्त्य (LCM) क्या है?",
+          "options": {
+            "A": { "en": "24", "hi": "24" },
+            "B": { "en": "48", "hi": "48" },
+            "C": { "en": "12", "hi": "12" },
+            "D": { "en": "36", "hi": "36" }
+          },
+          "correct": "A",
+          "explanation": { "en": "LCM(6,8) = 24.", "hi": "LCM(6,8) = 24।" },
+          "topic": "Number System",
+          "subject": "Math",
+          "difficulty": "easy"
+        }
+      ]
+    },
+    {
+      "sectionId": "reasoning",
+      "sectionName": "General Intelligence & Reasoning",
+      "questions": [
+        {
+          "en": "Find the missing term: 1, 4, 9, 16, ?",
+          "hi": "लुप्त पद ज्ञात करें: 1, 4, 9, 16, ?",
+          "options": {
+            "A": { "en": "20", "hi": "20" },
+            "B": { "en": "25", "hi": "25" },
+            "C": { "en": "24", "hi": "24" },
+            "D": { "en": "30", "hi": "30" }
+          },
+          "correct": "B",
+          "explanation": { "en": "Perfect squares: 1²,2²,3²,4²,5² → 25.", "hi": "पूर्ण वर्ग: 1²,2²,3²,4²,5² → 25।" },
+          "topic": "Number Series",
+          "subject": "Reasoning",
+          "difficulty": "easy"
+        }
+      ]
+    },
+    {
+      "sectionId": "ga",
+      "sectionName": "General Awareness",
+      "questions": [
+        {
+          "en": "Who was the first President of India?",
+          "hi": "भारत के प्रथम राष्ट्रपति कौन थे?",
+          "options": {
+            "A": { "en": "Dr. Rajendra Prasad", "hi": "डॉ. राजेंद्र प्रसाद" },
+            "B": { "en": "Dr. S. Radhakrishnan", "hi": "डॉ. एस. राधाकृष्णन" },
+            "C": { "en": "Jawaharlal Nehru", "hi": "जवाहरलाल नेहरू" },
+            "D": { "en": "Zakir Husain", "hi": "ज़ाकिर हुसैन" }
+          },
+          "correct": "A",
+          "explanation": { "en": "Dr. Rajendra Prasad was India's first President (1950).", "hi": "डॉ. राजेंद्र प्रसाद भारत के प्रथम राष्ट्रपति थे (1950)।" },
+          "topic": "Polity",
+          "subject": "GA",
+          "difficulty": "easy"
+        }
+      ]
+    },
+    {
+      "sectionId": "ga2",
+      "sectionName": "General Science",
+      "questions": [
+        {
+          "en": "The chemical symbol for Gold is?",
+          "hi": "सोने का रासायनिक प्रतीक क्या है?",
+          "options": {
+            "A": { "en": "Go", "hi": "Go" },
+            "B": { "en": "Gd", "hi": "Gd" },
+            "C": { "en": "Au", "hi": "Au" },
+            "D": { "en": "Ag", "hi": "Ag" }
+          },
+          "correct": "C",
+          "explanation": { "en": "Gold's symbol is Au (from Latin 'aurum').", "hi": "सोने का प्रतीक Au है (लैटिन 'aurum' से)।" },
+          "topic": "Chemistry",
+          "subject": "Science",
+          "difficulty": "easy"
+        }
+      ]
+    }
+  ]
+}
