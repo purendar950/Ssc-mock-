@@ -193,5 +193,5 @@ const EZAuth = (() => {
 
   const ready = (SUPA ? sbInit() : Promise.resolve()).catch((e) => console.warn("Auth init:", e));
 
-  return { ready, onChange, currentUser, isPremium, register, login, updateUser, grantPremium, logout, requireLogin, mode: SUPA ? "supabase" : "local" };
+  return { ready, onChange, currentUser, isPremium, register, login, updateUser, grantPremium, logout, requireLogin, getClient: () => client, mode: SUPA ? "supabase" : "local" };
 })();

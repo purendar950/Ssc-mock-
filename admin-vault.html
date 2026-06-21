@@ -35,62 +35,75 @@
   <script src="/js/store.js"></script>
   <script>
     EZ.mountChrome("");
-    if (!EZAuth.requireLogin()) {/* redirected */}
-    const u = EZAuth.currentUser();
-    let tab = "buy";
+    let u = null, tab = "buy";
+    const state = { payments: [], applications: [], partners: [], payouts: [] };
+
+    EZAuth.ready.then(() => { if (!EZAuth.requireLogin()) return; u = EZAuth.currentUser(); boot(); });
 
     function isAdmin() {
       const cu = EZAuth.currentUser();
-      return cu && (cu.isAdmin === true || cu.username.toLowerCase() === "admin");
+      return cu && (cu.isAdmin === true || (cu.username||"").toLowerCase() === "admin");
     }
 
-    function boot() {
+    async function boot() {
       if (!isAdmin()) {
+        const supa = (typeof EZAuth !== "undefined" && EZAuth.mode === "supabase");
         document.getElementById("gate").innerHTML = `
           <div class="card center">
             <p class="muted">This area is restricted to administrators.</p>
-            <p class="muted mt-8" style="font-size:.82rem">Demo mode: you can grant yourself admin access to explore the panel. In production this is set by <code>isAdmin: true</code> in Firestore.</p>
-            <button class="btn btn-primary mt-16" onclick="claimAdmin()">Enable admin access (demo)</button>
+            ${supa
+              ? `<p class="muted mt-8" style="font-size:.82rem">Set yourself as admin in Supabase:<br><code>update public.profiles set role='admin' where username='${(EZAuth.currentUser()||{}).username||'YOUR_USERNAME'}';</code></p>`
+              : `<p class="muted mt-8" style="font-size:.82rem">Demo mode: grant yourself admin access to explore the panel.</p>
+                 <button class="btn btn-primary mt-16" onclick="claimAdmin()">Enable admin access (demo)</button>`}
           </div>`;
+        document.getElementById("panel").classList.add("hidden");
         return;
       }
       document.getElementById("gate").innerHTML = "";
       document.getElementById("panel").classList.remove("hidden");
-      renderStats();
-      switchTab(tab);
+      await reload();
     }
 
-    function claimAdmin() {
-      EZAuth.updateUser({ isAdmin: true });
-      EZ.toast("Admin access enabled");
+    async function claimAdmin() {
+      const ok = await EZAuth.updateUser({ isAdmin: true });
+      EZ.toast(ok ? "Admin access enabled" : "Not allowed (set role in Supabase)");
       boot();
     }
 
-    function renderStats() {
-      const users = JSON.parse(localStorage.getItem("ez_users") || "{}");
-      const userArr = Object.values(users);
-      const premium = userArr.filter(x => x.plan === "premium").length;
-      const revenue = EZStore.payments().filter(p => p.status === "approved").reduce((s,p)=> s + (p.amount||0), 0);
+    async function reload() {
+      document.getElementById("tab-content").innerHTML = '<div class="empty-state">Loading…</div>';
+      const [payments, applications, partners, payouts, stats] = await Promise.all([
+        EZStore.listPayments(), EZStore.listApplications(), EZStore.listPartners(), EZStore.listPayouts(), EZStore.adminStats(),
+      ]);
+      state.payments = payments; state.applications = applications; state.partners = partners; state.payouts = payouts;
+      renderStats(stats);
+      renderTab();
+    }
+
+    function renderStats(s) {
       document.getElementById("stats").innerHTML = `
-        <div class="stat-card"><div class="num">${userArr.length}</div><div class="lbl">Registered Users</div></div>
-        <div class="stat-card"><div class="num">${premium}</div><div class="lbl">Premium Users</div></div>
-        <div class="stat-card"><div class="num">₹${revenue}</div><div class="lbl">Total Revenue</div></div>
-        <div class="stat-card"><div class="num">${EZStore.partners().length}</div><div class="lbl">Active Partners</div></div>`;
+        <div class="stat-card"><div class="num">${s.users}</div><div class="lbl">Registered Users</div></div>
+        <div class="stat-card"><div class="num">${s.premium}</div><div class="lbl">Premium Users</div></div>
+        <div class="stat-card"><div class="num">₹${s.revenue}</div><div class="lbl">Total Revenue</div></div>
+        <div class="stat-card"><div class="num">${s.partners}</div><div class="lbl">Active Partners</div></div>`;
     }
 
     function switchTab(t) {
       tab = t;
       document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("active", b.dataset.tab===t));
+      renderTab();
+    }
+    function renderTab() {
       const c = document.getElementById("tab-content");
-      if (t === "buy") c.innerHTML = buyTab();
-      else if (t === "partners") c.innerHTML = partnerTab();
-      else if (t === "payouts") c.innerHTML = payoutTab();
+      if (tab === "buy") c.innerHTML = buyTab();
+      else if (tab === "partners") c.innerHTML = partnerTab();
+      else if (tab === "payouts") c.innerHTML = payoutTab();
       else c.innerHTML = ledgerTab();
     }
 
     /* ---------- Buy requests ---------- */
     function buyTab() {
-      const reqs = EZStore.payments().sort((a,b)=> new Date(b.submittedAt)-new Date(a.submittedAt));
+      const reqs = [...state.payments].sort((a,b)=> new Date(b.submittedAt)-new Date(a.submittedAt));
       const pending = reqs.filter(r=>r.status==="pending");
       if (!reqs.length) return `<div class="empty-state">No payment requests yet.</div>`;
       return `
@@ -103,8 +116,8 @@
         return `<div class="card table-wrap" style="padding:0"><table class="data-table">
           <thead><tr><th>User</th><th>UTR</th><th>Amount</th><th>Coupon</th><th>${actions?'Actions':'Status'}</th></tr></thead>
           <tbody>${list.map(r=>`<tr>
-            <td>${r.username}<div class="meta muted">${r.email}</div></td>
-            <td>${r.utr}</td>
+            <td>${r.username||''}<div class="meta muted">${r.email||''}</div></td>
+            <td>${r.utr||''}</td>
             <td>₹${r.amount}</td>
             <td>${r.couponUsed||'NONE'}</td>
             <td>${actions
@@ -114,12 +127,12 @@
           </tr>`).join("")}</tbody></table></div>`;
       }
     }
-    function approveBuy(id){ EZStore.approvePayment(id, u.uid); EZ.toast("Approved & premium granted"); renderStats(); switchTab("buy"); }
-    function rejectBuy(id){ EZStore.rejectPayment(id, u.uid); EZ.toast("Rejected"); switchTab("buy"); }
+    async function approveBuy(id){ const ok = await EZStore.approvePayment(id, u.uid); EZ.toast(ok?"Approved & premium granted":"Approve failed"); reload(); }
+    async function rejectBuy(id){ await EZStore.rejectPayment(id, u.uid); EZ.toast("Rejected"); reload(); }
 
     /* ---------- Partner requests ---------- */
     function partnerTab() {
-      const apps = EZStore.applications().sort((a,b)=> new Date(b.appliedAt)-new Date(a.appliedAt));
+      const apps = [...state.applications].sort((a,b)=> new Date(b.appliedAt)-new Date(a.appliedAt));
       const pending = apps.filter(a=>a.status==="pending");
       if (!apps.length) return `<div class="empty-state">No partner applications yet.</div>`;
       return `
@@ -132,9 +145,9 @@
         return `<div class="card table-wrap" style="padding:0"><table class="data-table">
           <thead><tr><th>User</th><th>Code</th><th>UPI</th><th>Links</th><th>${actions?'Actions':'Status'}</th></tr></thead>
           <tbody>${list.map(a=>`<tr>
-            <td>${a.username}<div class="meta muted">${a.phone||''}</div></td>
+            <td>${a.username||''}<div class="meta muted">${a.phone||''}</div></td>
             <td><b>${a.couponCode}</b></td>
-            <td>${a.upiId}</td>
+            <td>${a.upiId||''}</td>
             <td style="max-width:160px;word-break:break-all">${a.socialLinks||''}</td>
             <td>${actions
               ? `<button class="btn btn-sm btn-success" onclick="approveApp('${a.id}')">Approve</button>
@@ -143,12 +156,12 @@
           </tr>`).join("")}</tbody></table></div>`;
       }
     }
-    function approveApp(id){ if(EZStore.approveApplication(id)){EZ.toast("Partner approved");} else {EZ.toast("Could not approve (code taken?)");} renderStats(); switchTab("partners"); }
-    function rejectApp(id){ EZStore.rejectApplication(id); EZ.toast("Rejected"); switchTab("partners"); }
+    async function approveApp(id){ const ok = await EZStore.approveApplication(id); EZ.toast(ok?"Partner approved":"Could not approve (code taken?)"); reload(); }
+    async function rejectApp(id){ await EZStore.rejectApplication(id); EZ.toast("Rejected"); reload(); }
 
     /* ---------- Payouts ---------- */
     function payoutTab() {
-      const pos = EZStore.payouts().sort((a,b)=> new Date(b.requestedAt)-new Date(a.requestedAt));
+      const pos = [...state.payouts].sort((a,b)=> new Date(b.requestedAt)-new Date(a.requestedAt));
       const pending = pos.filter(p=>p.status==="pending");
       if (!pos.length) return `<div class="empty-state">No payout requests yet.</div>`;
       return `
@@ -163,7 +176,7 @@
           <tbody>${list.map(p=>`<tr>
             <td>${p.couponCode}</td>
             <td>₹${p.amount}</td>
-            <td>${p.upiId}</td>
+            <td>${p.upiId||''}</td>
             <td>${actions
               ? `<button class="btn btn-sm btn-success" onclick="payPo('${p.id}')">Mark Paid</button>
                  <button class="btn btn-sm btn-danger" onclick="rejPo('${p.id}')">Reject</button>`
@@ -171,26 +184,24 @@
           </tr>`).join("")}</tbody></table></div>`;
       }
     }
-    function payPo(id){ EZStore.payPayout(id); EZ.toast("Marked paid"); switchTab("payouts"); }
-    function rejPo(id){ EZStore.rejectPayout(id); EZ.toast("Rejected"); switchTab("payouts"); }
+    async function payPo(id){ await EZStore.payPayout(id); EZ.toast("Marked paid"); reload(); }
+    async function rejPo(id){ await EZStore.rejectPayout(id); EZ.toast("Rejected"); reload(); }
 
     /* ---------- Ledger ---------- */
     function ledgerTab() {
-      const ps = EZStore.partners();
+      const ps = state.partners;
       if (!ps.length) return `<div class="empty-state">No partners yet.</div>`;
       return `<div class="card table-wrap" style="padding:0"><table class="data-table">
         <thead><tr><th>Code</th><th>Partner</th><th>Sales</th><th>Earned</th><th>Available</th><th>Withdrawn</th></tr></thead>
         <tbody>${ps.map(p=>`<tr>
           <td><b>${p.couponCode}</b></td>
-          <td>${p.username}</td>
+          <td>${p.username||''}</td>
           <td>${p.totalSales||0}</td>
           <td>₹${p.totalRevenue||0}</td>
           <td>₹${p.pendingPayout||0}</td>
           <td>₹${p.totalWithdrawn||0}</td>
         </tr>`).join("")}</tbody></table></div>`;
     }
-
-    boot();
   </script>
 </body>
 </html>
