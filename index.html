@@ -4,76 +4,71 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#2563eb" />
-  <title>ExamZen — Free & Premium Mock Tests for SSC, Railway & State Exams</title>
+  <title>ExamZen | SSC, Railway & State Mock Tests — PYQ & Full Mocks</title>
+  <meta name="description" content="Free & premium mock tests for SSC, Railway and State exams. PYQ, Sectional, Subject-wise and Full Mocks with All-India ranking." />
   <link rel="manifest" href="/manifest.json" />
   <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
-  <div id="ez-header"></div>
-
   <main class="page">
+    <section class="app-hero">
+      <div class="tag">👋 Welcome to ExamZen</div>
+      <h1>Crack SSC, Railway &amp; State Exams</h1>
+      <p>Your one-stop hub for PYQs, Sectionals, Subject-wise practice and premium Full Mocks — in English &amp; हिन्दी.</p>
+      <a href="/exams/index.html" class="btn">Start Practicing</a>
+    </section>
+
+    <div class="stats-scroll">
+      <div class="stat-chip"><div class="v">20,000+</div><div class="l">PYQ Bank</div></div>
+      <div class="stat-chip"><div class="v">2025</div><div class="l">New Pattern</div></div>
+      <div class="stat-chip"><div class="v">All-India</div><div class="l">Live Ranking</div></div>
+      <div class="stat-chip"><div class="v">₹99/yr</div><div class="l">One-time</div></div>
+    </div>
+
     <div class="container">
-      <section class="hero">
-        <h1>Crack SSC, Railway & State Exams</h1>
-        <p>20,000+ PYQs • Full-length mocks • Sectional & subject-wise tests • All-India ranking</p>
-        <a class="btn" href="/exams/index.html">Start Practicing →</a>
-      </section>
+      <h5 style="font-weight:800;margin:4px 0 12px"><i class="fas fa-layer-group" style="color:var(--primary)"></i> Practice Hub</h5>
+    </div>
 
-      <div class="grid grid-3 mt-24">
-        <div class="card center">
-          <div style="font-size:1.8rem;font-weight:800;color:var(--primary)">20,000+</div>
-          <div class="muted">Previous Year Questions</div>
-        </div>
-        <div class="card center">
-          <div style="font-size:1.8rem;font-weight:800;color:var(--primary)">All-India</div>
-          <div class="muted">Live ranking on submit</div>
-        </div>
-        <div class="card center">
-          <div style="font-size:1.8rem;font-weight:800;color:var(--primary)">₹99/yr</div>
-          <div class="muted">One-time, 365 days</div>
-        </div>
-      </div>
+    <div class="action-grid">
+      <a href="/exams/index.html" class="action-box">
+        <div class="ico"><i class="fas fa-graduation-cap"></i></div>
+        <h3>EXAMS</h3>
+        <p>SSC, Railway &amp; State PYQs</p>
+      </a>
+      <a href="/live-test/index.html" class="action-box live">
+        <div class="ico"><i class="fas fa-tower-broadcast"></i></div>
+        <h3>LIVE TESTS</h3>
+        <p>Real-time All-India ranking</p>
+      </a>
+    </div>
 
-      <h2 class="section-title">Popular Exams</h2>
-      <div class="grid grid-2" id="exam-cards"></div>
+    <div class="container mt-24">
+      <h5 style="font-weight:800;margin:4px 0 12px"><i class="fas fa-fire" style="color:var(--primary)"></i> Popular Exams</h5>
+      <div class="exam-grid" id="popular"></div>
+    </div>
 
-      <h2 class="section-title">Why ExamZen?</h2>
-      <div class="grid grid-3">
-        <div class="card"><b>🎯 Real exam pattern</b><p class="muted mt-8">Tier-I/II patterns, negative marking, section navigation just like the actual CBT.</p></div>
-        <div class="card"><b>🌐 Bilingual</b><p class="muted mt-8">Every question in English & हिन्दी with detailed explanations.</p></div>
-        <div class="card"><b>📊 Deep analytics</b><p class="muted mt-8">Section-wise breakdown, accuracy, time taken and All-India rank.</p></div>
-      </div>
-
-      <div class="card mt-24 center">
-        <h3>Go Premium</h3>
-        <p class="muted mt-8">Unlock all mocks, all PYQs, unlimited reattempts & advanced analytics.</p>
+    <div class="container mt-24">
+      <div class="card center">
+        <h3>Go Premium — ₹99/year</h3>
+        <p class="muted mt-8">Unlock all mocks, all PYQs, unlimited reattempts &amp; advanced analytics.</p>
         <a class="btn btn-primary mt-16" href="/pricing.html">View Plans</a>
       </div>
     </div>
   </main>
-
-  <div id="ez-bottomnav"></div>
 
   <script src="/js/firebase-config.js"></script>
   <script src="/js/auth.js"></script>
   <script src="/js/utils.js"></script>
   <script>
     EZ.mountChrome("home");
-    const exams = [
-      { id: "cgl", name: "SSC CGL", sub: "Combined Graduate Level", emoji: "📘", live: true },
-      { id: "chsl", name: "SSC CHSL", sub: "10+2 Level", emoji: "📗", live: true },
-      { id: "railway", name: "Railway NTPC", sub: "Non-Technical Popular", emoji: "🚆", live: true },
-      { id: "mts", name: "SSC MTS", sub: "Multi-Tasking Staff", emoji: "📙", live: false },
-    ];
-    document.getElementById("exam-cards").innerHTML = exams.map(e => `
-      <a class="card" href="${e.live ? `/exams/portal.html?exam=${e.id}` : '#'}" style="display:block;${e.live?'':'opacity:.6'}">
-        <div class="row between">
-          <div class="row"><span style="font-size:1.6rem">${e.emoji}</span>
-            <div><h4 style="color:var(--text)">${e.name}</h4><div class="meta muted">${e.sub}</div></div>
-          </div>
-          <span class="badge ${e.live ? 'badge-free' : 'badge-premium'}">${e.live ? 'Open' : 'Soon'}</span>
-        </div>
-      </a>`).join("");
+    fetch("/data/catalog.json").then(r=>r.json()).then(cat => {
+      document.getElementById("popular").innerHTML = Object.entries(cat).map(([id, e]) => `
+        <a class="exam-card" href="${e.available ? `/exams/portal.html?exam=${id}` : '#'}" style="${e.available?'':'opacity:.55;pointer-events:none'}">
+          <div class="ico">${e.emoji}</div>
+          <div style="font-weight:800">${e.name}</div>
+          <div class="muted" style="font-size:.72rem">${e.available ? 'Open' : 'Coming soon'}</div>
+        </a>`).join("");
+    }).catch(()=>{ document.getElementById("popular").innerHTML = '<div class="muted">Serve over HTTP to load exams.</div>'; });
   </script>
 </body>
 </html>

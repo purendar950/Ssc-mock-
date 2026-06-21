@@ -204,3 +204,52 @@ After the workflow completes, the site is live at:
 `https://<owner>.github.io/<repo>/`
 
 `.nojekyll` is included so all files are served as-is.
+
+
+---
+
+## 🔑 Supabase authentication (optional, recommended for production)
+
+The app ships in **Local Mode** (browser-only auth) and flips to **Supabase Mode**
+automatically once you provide real credentials. Auth state drives premium/admin/partner
+access across the whole UI via the `profiles` table.
+
+### Setup (4 steps)
+1. Create a project at [supabase.com](https://supabase.com).
+2. **SQL Editor → New query →** paste & run [`supabase/schema.sql`](supabase/schema.sql).
+   This creates the `profiles` table, a trigger that auto-creates a profile on signup,
+   RLS policies, and the username-login RPCs.
+3. **Project Settings → API**: copy the **Project URL** and **anon public** key into
+   `js/firebase-config.js`:
+   ```js
+   window.SUPABASE_URL = "https://YOURREF.supabase.co";
+   window.SUPABASE_ANON_KEY = "eyJhbGciOi...";
+   ```
+4. (Optional) **Authentication → Providers → Email**: turn **Confirm email** off for
+   instant login during testing, or leave it on (users confirm via email before first login).
+
+### Make yourself admin
+After registering once, run in the SQL editor:
+```sql
+update public.profiles set role = 'admin' where username = 'YOUR_USERNAME';
+```
+
+### How it maps
+| App concept            | profiles column            |
+|------------------------|----------------------------|
+| `plan: "premium"`      | `is_paid` + `expires_at`   |
+| `isAdmin`              | `role = 'admin'`           |
+| `isPartner`            | `is_partner`               |
+| username login         | `email_for_username()` RPC |
+
+The `EZAuth` API (`currentUser`, `isPremium`, `login`, `register`, `updateUser`,
+`grantPremium`, `logout`, `requireLogin`) is identical in both modes —
+`currentUser()`/`isPremium()` stay synchronous (backed by a cached profile that Supabase
+hydrates), so no page code changes between modes. Await `EZAuth.ready` for the initial
+session restore.
+
+> **Scope note:** This integration covers **auth + profile-driven access**. The payment
+> requests and partner ledger (`js/store.js`) still use local storage; moving those into
+> Supabase tables (with an edge function to flip `is_paid` on admin approval) is the
+> natural next step. RLS already prevents non-admins from changing `is_paid`/`role`, so
+> the in-app "claim admin" button only works in Local Mode by design.

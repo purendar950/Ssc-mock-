@@ -1,0 +1,26 @@
+{
+  "examCode": "CHSL",
+  "examName": "SSC CHSL",
+  "config": {
+    "tier1": {
+      "sections": [
+        {"id": "REASONING", "name": "General Intelligence", "qs": 25, "time": "Shared", "marks": 50},
+        {"id": "GK", "name": "General Awareness", "qs": 25, "time": "Shared", "marks": 50},
+        {"id": "MATHS", "name": "Quantitative Aptitude", "qs": 25, "time": "Shared", "marks": 50},
+        {"id": "ENGLISH", "name": "English Language", "qs": 25, "time": "Shared", "marks": 50}
+      ]
+    }
+  },
+  "data": {
+    "tier1": {
+      "2025": {
+        "full_mocks": [
+          {"id": "chsl-full-mock-01", "title": "CHSL Tier-I Full Mock 1", "type": "free", "releaseDate": "01-06-2026", "qs": 100, "time": "60 Min", "marks": 200},
+          {"id": "chsl-full-mock-02", "title": "CHSL Tier-I Full Mock 2", "type": "paid", "releaseDate": "10-06-2026", "qs": 100, "time": "60 Min", "marks": 200}
+        ],
+        "sectional": [],
+        "subject_wise": []
+      }
+    }
+  }
+}

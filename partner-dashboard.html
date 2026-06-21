@@ -25,19 +25,20 @@
   <script src="/js/store.js"></script>
   <script>
     EZ.mountChrome("");
-    if (!EZAuth.requireLogin()) {/* redirected */}
-    const u = EZAuth.currentUser();
+    let u = null;
     const MIN_PAYOUT = 100;
+    EZAuth.ready.then(() => { if (!EZAuth.requireLogin()) return; u = EZAuth.currentUser(); render(); });
 
-    function render() {
+    async function render() {
       const root = document.getElementById("dash-root");
-      const p = EZStore.findPartnerByUser(u.uid);
+      const p = await EZStore.findPartnerByUser(u.uid);
       if (!p) {
         root.innerHTML = `<div class="empty-state"><div class="big">🤝</div>You're not a partner yet.<br><a href="/apply-coupon.html">Apply to become a partner →</a></div>`;
         return;
       }
       const link = location.origin + "/buy-premium.html?ref=" + p.couponCode;
-      const payouts = EZStore.payouts().filter(x => x.couponCode === p.couponCode)
+      const allPayouts = await EZStore.listPayouts();
+      const payouts = allPayouts.filter(x => x.couponCode === p.couponCode)
         .sort((a,b)=> new Date(b.requestedAt) - new Date(a.requestedAt));
 
       root.innerHTML = `
@@ -88,21 +89,20 @@
       EZ.toast("Link copied!");
     }
 
-    function requestPayout() {
-      const p = EZStore.findPartnerByUser(u.uid);
+    async function requestPayout() {
+      const p = await EZStore.findPartnerByUser(u.uid);
       const amt = parseInt(document.getElementById("payout-amt").value, 10);
       if (!amt || amt < MIN_PAYOUT) { EZ.toast("Minimum payout is ₹" + MIN_PAYOUT); return; }
       if (amt > (p.pendingPayout||0)) { EZ.toast("Amount exceeds available balance"); return; }
-      EZStore.addPayout({
+      const ok = await EZStore.addPayout({
         id: "po_" + Date.now(),
         partnerId: p.userId, couponCode: p.couponCode,
         amount: amt, upiId: p.upiId, status: "pending",
         requestedAt: new Date().toISOString(),
       });
-      EZ.toast("Payout requested ✅");
+      EZ.toast(ok ? "Payout requested ✅" : "Could not request payout");
       render();
     }
-    render();
   </script>
 </body>
 </html>

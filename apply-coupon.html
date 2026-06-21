@@ -43,13 +43,14 @@
   <script src="/js/store.js"></script>
   <script>
     EZ.mountChrome("");
-    if (!EZAuth.requireLogin()) {/* redirected */}
-    const u = EZAuth.currentUser();
+    let u = null;
+    EZAuth.ready.then(() => { if (!EZAuth.requireLogin()) return; u = EZAuth.currentUser(); refresh(); });
 
-    function refresh() {
+    async function refresh() {
       if (!u) return;
-      const existing = EZStore.findPartnerByUser(u.uid);
-      const pending = EZStore.applications().find(a => a.userId === u.uid && a.status === "pending");
+      const existing = await EZStore.findPartnerByUser(u.uid);
+      const apps = await EZStore.listApplications();
+      const pending = apps.find(a => a.userId === u.uid && a.status === "pending");
       const box = document.getElementById("status-box");
       const form = document.getElementById("form-box");
       if (existing) {
@@ -67,15 +68,16 @@
       }
     }
 
-    function apply(e) {
+    async function apply(e) {
       e.preventDefault();
       const code = document.getElementById("code").value.trim().toUpperCase();
       const msg = document.getElementById("code-msg");
-      if (EZStore.findPartnerByCode(code) || EZStore.resolveCoupon(code).code === "WELCOME") {
+      const existsPartner = await EZStore.findPartnerByCode(code);
+      if (existsPartner || code === "WELCOME") {
         msg.style.color = "var(--danger)"; msg.textContent = "That code is already taken. Try another.";
         return false;
       }
-      EZStore.addApplication({
+      await EZStore.addApplication({
         id: "app_" + Date.now(),
         userId: u.uid, username: u.username, email: u.email,
         phone: document.getElementById("phone").value,
@@ -89,7 +91,6 @@
       refresh();
       return false;
     }
-    refresh();
   </script>
 </body>
 </html>

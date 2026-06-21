@@ -54,16 +54,18 @@
     EZ.mountChrome("");
     if (!EZAuth.requireLogin()) {/* redirected */}
 
-    let resolved = EZStore.resolveCoupon("");
+    let resolved = { valid: true, code: "NONE", price: EZStore.BASE_PRICE, discount: 0 };
 
     // Pre-fill coupon from ?ref= referral links
     const ref = EZ.qs("ref");
-    if (ref) { document.getElementById("coupon").value = ref.toUpperCase(); applyCoupon(); }
+    EZAuth.ready.then(() => {
+      if (ref) { document.getElementById("coupon").value = ref.toUpperCase(); applyCoupon(); }
+    });
 
-    function applyCoupon() {
+    async function applyCoupon() {
       const code = (document.getElementById("coupon").value || "").trim().toUpperCase();
       const msg = document.getElementById("coupon-msg");
-      resolved = EZStore.resolveCoupon(code);
+      resolved = await EZStore.resolveCoupon(code);
       if (!code) { msg.textContent = ""; render(); return; }
       if (resolved.valid && resolved.code !== "NONE") {
         msg.style.color = "var(--success)";
@@ -71,7 +73,7 @@
       } else {
         msg.style.color = "var(--danger)";
         msg.textContent = "Invalid or inactive coupon code.";
-        resolved = EZStore.resolveCoupon("");
+        resolved = await EZStore.resolveCoupon("");
       }
       render();
     }
@@ -81,11 +83,11 @@
       document.getElementById("qr").textContent = "QR ₹" + resolved.price;
     }
 
-    function submitPayment(e) {
+    async function submitPayment(e) {
       e.preventDefault();
       const u = EZAuth.currentUser();
       if (EZAuth.isPremium()) { EZ.toast("You're already Premium 🎉"); return false; }
-      EZStore.addPayment({
+      await EZStore.addPayment({
         id: "pay_" + Date.now(),
         userId: u.uid, username: u.username, email: u.email,
         phone: document.getElementById("phone").value,

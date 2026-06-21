@@ -27,14 +27,23 @@ const TestEngine = (() => {
 
     let res;
     try {
-      res = await fetch("/data/" + testId + ".json");
+      res = await fetch("/data/tests/" + testId + ".json");
       if (!res.ok) throw new Error("not found");
       testData = await res.json();
     } catch {
-      return fail("Could not load this test. Serve the site over HTTP (not file://).");
+      // Fallback: load a demo bank so any listed mock is still attemptable.
+      try {
+        res = await fetch("/data/tests/cgl-full-mock-01.json");
+        testData = await res.json();
+        testData = { ...testData, testName: (EZ.qs("title") || testData.testName) + " (Demo questions)", _demo: true };
+      } catch {
+        return fail("Could not load this test. Serve the site over HTTP (not file://).");
+      }
     }
 
-    if (testData.isPremium && !EZAuth.isPremium()) {
+    // Premium gating: from the test file or the ?premium=1 flag passed by the portal.
+    const wantsPremium = testData.isPremium || EZ.qs("premium") === "1";
+    if (wantsPremium && !EZAuth.isPremium()) {
       alert("This is a Premium test. Redirecting to pricing.");
       location.href = "/pricing.html";
       return;

@@ -1,52 +1,6 @@
 {
-  "cgl": {
-    "name": "SSC CGL",
-    "subtitle": "Combined Graduate Level",
-    "emoji": "📘",
-    "available": true,
-    "tabs": {
-      "full": [
-        { "testId": "cgl-full-mock-01", "name": "CGL Tier-I Full Mock 1", "questions": 8, "marks": 16, "durationMin": 10, "premium": false },
-        { "testId": "cgl-full-mock-02", "name": "CGL Tier-I Full Mock 2", "questions": 8, "marks": 16, "durationMin": 10, "premium": true }
-      ],
-      "sectional": [
-        { "testId": "cgl-sectional-reasoning-01", "name": "Reasoning Sectional — Set 1", "questions": 4, "marks": 8, "durationMin": 6, "premium": false }
-      ],
-      "subject": [
-        { "testId": "cgl-subject-blood-relations", "name": "Reasoning: Blood Relations", "questions": 3, "marks": 6, "durationMin": 5, "premium": false }
-      ],
-      "pyq": [
-        { "testId": "cgl-pyq-2023", "name": "CGL 2023 PYQ Set", "questions": 4, "marks": 8, "durationMin": 6, "premium": true }
-      ]
-    }
-  },
-  "chsl": {
-    "name": "SSC CHSL",
-    "subtitle": "10+2 Higher Secondary Level",
-    "emoji": "📗",
-    "available": true,
-    "tabs": {
-      "full": [
-        { "testId": "chsl-full-mock-01", "name": "CHSL Tier-I Full Mock 1", "questions": 4, "marks": 8, "durationMin": 6, "premium": false }
-      ]
-    }
-  },
-  "railway": {
-    "name": "Railway NTPC",
-    "subtitle": "Non-Technical Popular Categories",
-    "emoji": "🚆",
-    "available": true,
-    "tabs": {
-      "full": [
-        { "testId": "railway-ntpc-mock-01", "name": "NTPC CBT-1 Full Mock 1", "questions": 4, "marks": 4, "durationMin": 6, "premium": false }
-      ]
-    }
-  },
-  "mts": {
-    "name": "SSC MTS",
-    "subtitle": "Multi-Tasking Staff",
-    "emoji": "📙",
-    "available": false,
-    "tabs": {}
-  }
+  "cgl":     { "name": "SSC CGL",     "emoji": "📘", "available": true,  "dataFile": "cgl-data.json" },
+  "chsl":    { "name": "SSC CHSL",    "emoji": "📗", "available": true,  "dataFile": "chsl-data.json" },
+  "railway": { "name": "Railway NTPC","emoji": "🚆", "available": true,  "dataFile": "railway-data.json" },
+  "mts":     { "name": "SSC MTS",     "emoji": "📙", "available": false, "dataFile": "mts-data.json" }
 }

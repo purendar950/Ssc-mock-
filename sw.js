@@ -1,5 +1,5 @@
 /* ExamZen service worker - cache static shell + question data */
-const CACHE = "examzen-v2";
+const CACHE = "examzen-v3";
 const PRECACHE = [
   "/index.html",
   "/login.html",

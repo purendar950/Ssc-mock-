@@ -1,0 +1,55 @@
+{
+  "examCode": "CGL",
+  "examName": "SSC CGL",
+  "config": {
+    "tier1": {
+      "sections": [
+        {"id": "REASONING", "name": "General Intelligence & Reasoning", "qs": 25, "time": "Shared", "marks": 50},
+        {"id": "GK", "name": "General Awareness", "qs": 25, "time": "Shared", "marks": 50},
+        {"id": "MATHS", "name": "Quantitative Aptitude", "qs": 25, "time": "Shared", "marks": 50},
+        {"id": "ENGLISH", "name": "English Comprehension", "qs": 25, "time": "Shared", "marks": 50}
+      ]
+    },
+    "tier2": {
+      "sections": [
+        {"id": "MATHS", "name": "Mathematical Abilities", "qs": 30, "time": "Shared", "marks": 90},
+        {"id": "ENGLISH", "name": "English Language", "qs": 45, "time": "Shared", "marks": 135}
+      ]
+    }
+  },
+  "data": {
+    "tier1": {
+      "2025": {
+        "full_mocks": [
+          {"id": "cgl-full-mock-01", "title": "CGL Tier-I Full Mock 1", "type": "free", "releaseDate": "01-06-2026", "qs": 100, "time": "60 Min", "marks": 200},
+          {"id": "cgl-full-mock-02", "title": "CGL Tier-I Full Mock 2", "type": "paid", "releaseDate": "08-06-2026", "qs": 100, "time": "60 Min", "marks": 200},
+          {"id": "cgl-full-mock-03", "title": "CGL Tier-I Full Mock 3", "type": "paid", "releaseDate": "15-06-2026", "qs": 100, "time": "60 Min", "marks": 200}
+        ],
+        "sectional": [
+          {"id": "cgl-sectional-reasoning-01", "title": "Reasoning Sectional — Set 1", "type": "free", "qs": 25, "time": "20 Min", "marks": 50},
+          {"id": "cgl-sectional-quant-01", "title": "Quant Sectional — Set 1", "type": "paid", "qs": 25, "time": "20 Min", "marks": 50}
+        ],
+        "subject_wise": [
+          {"id": "cgl-subject-blood-relations", "title": "Reasoning: Blood Relations", "type": "free", "qs": 15, "time": "15 Min", "marks": 30},
+          {"id": "cgl-subject-percentage", "title": "Quant: Percentage", "type": "paid", "qs": 20, "time": "20 Min", "marks": 40}
+        ]
+      },
+      "2024": {
+        "full_mocks": [
+          {"id": "cgl-pyq-2023", "title": "CGL 2023 PYQ Set", "type": "paid", "qs": 100, "time": "60 Min", "marks": 200}
+        ],
+        "sectional": [],
+        "subject_wise": []
+      }
+    },
+    "tier2": {
+      "2025": {
+        "full_mocks": [
+          {"id": "cgl-t2-mock-01", "title": "CGL Tier-II Mock 1", "type": "paid", "qs": 150, "time": "150 Min", "marks": 450}
+        ],
+        "sectional": [],
+        "subject_wise": []
+      }
+    }
+  }
+}
